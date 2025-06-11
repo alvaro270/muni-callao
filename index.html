@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComedorDigital - Dashboard Principal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B42A0',
+                        secondary: '#10B099'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .animate-pulse-slow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <!-- Desktop Header -->
+            <div class="hidden md:flex items-center justify-between h-20 py-4">
+                <!-- Logo Municipalidad (Izquierda) -->
+                <div class="flex items-center flex-shrink-0">
+                    <img src="./assets/img/logo.png" alt="Logo Municipalidad del callao" class="h-12 lg:h-16 w-auto">
+                </div>
+
+                <!-- Logo Central ComedorDigital -->
+                <div class="flex items-center justify-center flex-grow">
+                    <h1 class="text-xl lg:text-2xl font-bold text-gray-800">ComedorDigital</h1>
+                </div>
+
+                <!-- Logo Callao (Derecha) -->
+                <div class="flex items-center flex-shrink-0">
+                    <img src="./assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos" class="h-12 lg:h-16 w-auto">
+                </div>
+            </div>
+
+            <!-- Mobile Header -->
+            <div class="md:hidden flex items-center justify-between h-16 py-2">
+                <!-- Logo Municipalidad -->
+                <div class="flex items-center">
+                    <img src="./assets/img/logo.png" alt="Logo Municipalidad del callao" class="h-10 w-auto">
+                </div>
+
+                <!-- Título Central -->
+                <div class="flex-grow text-center">
+                    <h1 class="text-lg font-bold text-gray-800">ComedorDigital</h1>
+                </div>
+
+                <!-- Logo Callao -->
+                <div class="flex items-center">
+                    <img src="./assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos" class="h-10 w-auto">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-primary shadow-sm">
+        <div class="container mx-auto px-4">
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center justify-center space-x-1 lg:space-x-2 py-3">
+                <button class="bg-white text-primary px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 shadow-sm">
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                    <span>➕</span>
+                    <span>Registrar</span>
+                </button>
+                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                    <span>🍽️</span>
+                    <span>Entregas</span>
+                </button>
+                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                    <span>👥</span>
+                    <span>Beneficiarios</span>
+                </button>
+                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                    <span>📊</span>
+                    <span>Reportes</span>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div class="md:hidden">
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center justify-between py-3">
+                    <button class="bg-white text-primary px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 shadow-sm">
+                        <span>🏠</span>
+                        <span>Dashboard</span>
+                    </button>
+                    <button 
+                        id="mobile-menu-btn"
+                        class="text-white hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors"
+                        onclick="toggleMobileMenu()"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Dropdown -->
+                <div id="mobile-menu" class="mobile-menu">
+                    <div class="pb-3 space-y-2">
+                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>➕</span>
+                            <span>Registrar</span>
+                        </button>
+                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>🍽️</span>
+                            <span>Entregas</span>
+                        </button>
+                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>👥</span>
+                            <span>Beneficiarios</span>
+                        </button>
+                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>📊</span>
+                            <span>Reportes</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Fecha y Saludo -->
+        <div class="mb-6">
+            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
+                ¡Buen día! 👋
+            </h2>
+            <p class="text-gray-600 text-sm md:text-base" id="currentDate">
+                Hoy es miércoles, 11 de junio de 2025
+            </p>
+        </div>
+
+        <!-- Estadísticas del Día -->
+        <section class="mb-8">
+            <div class="flex items-center mb-4">
+                <span class="text-xl md:text-2xl mr-3">📊</span>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800">Estadísticas del Día</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <!-- Desayunos -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-orange-400">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Desayunos Entregados</p>
+                            <p class="text-2xl md:text-3xl font-bold text-orange-600" id="desayunos">456</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">🌅</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-400 h-2 rounded-full" style="width: 76%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">76% de capacidad</p>
+                    </div>
+                </div>
+
+                <!-- Almuerzos -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-secondary">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Almuerzos Entregados</p>
+                            <p class="text-2xl md:text-3xl font-bold text-secondary" id="almuerzos">623</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">🍽️</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-secondary h-2 rounded-full" style="width: 86%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">86% de capacidad</p>
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-primary">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Total Raciones</p>
+                            <p class="text-2xl md:text-3xl font-bold text-primary" id="total">1,079</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">🎯</div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-primary h-2 rounded-full" style="width: 81%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">81% de capacidad total</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Acceso Rápido -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-md p-4 md:p-6">
+                <div class="flex items-center mb-4 md:mb-6">
+                    <span class="text-xl md:text-2xl mr-3">⚡</span>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-800">Acceso Rápido - Registrar Entrega</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">DNI del Beneficiario</label>
+                            <input 
+                                type="text" 
+                                placeholder="Ingrese DNI aquí" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm md:text-base"
+                                id="dniInput"
+                                maxlength="8"
+                            >
+                        </div>
+                        <div class="flex items-end">
+                            <button 
+                                class="bg-secondary hover:bg-teal-600 text-white px-4 md:px-6 py-3 rounded-lg font-medium transition-colors w-full md:w-auto text-sm md:text-base"
+                                onclick="buscarBeneficiario()"
+                            >
+                                🔍 Buscar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Información del Beneficiario -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4" id="beneficiarioInfo" style="display: none;">
+                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">👤 Información del Beneficiario</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
+                            <div>
+                                <strong class="text-gray-700">Beneficiario:</strong>
+                                <span id="nombreBeneficiario" class="text-gray-600">-</span>
+                            </div>
+                            <div>
+                                <strong class="text-gray-700">DNI:</strong>
+                                <span id="dniBeneficiario" class="text-gray-600">-</span>
+                            </div>
+                            <div>
+                                <strong class="text-gray-700">Comedor:</strong>
+                                <span id="comedorBeneficiario" class="text-gray-600">-</span>
+                            </div>
+                            <div>
+                                <strong class="text-gray-700">Estado:</strong>
+                                <span id="estadoBeneficiario" class="text-green-600">✅ Activo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Registro -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center" id="botonesRegistro" style="display: none;">
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+                            <span>🌅</span>
+                            <span>Registrar Desayuno</span>
+                        </button>
+                        <button class="bg-primary hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+                            <span>🍽️</span>
+                            <span>Registrar Almuerzo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resumen por Comedores -->
+        <section class="mb-8">
+            <div class="flex items-center mb-4">
+                <span class="text-xl md:text-2xl mr-3">🏢</span>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800">Resumen por Comedores</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                <!-- Teresa Izquierdo -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-gray-800 text-sm md:text-base">Teresa Izquierdo</h4>
+                        <span class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-sm md:text-base">
+                            <span class="text-gray-600">🌅 Desayunos:</span>
+                            <span class="font-semibold">356 de 600</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-400 h-2 rounded-full" style="width: 59%"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm md:text-base">
+                            <span class="text-gray-600">🍽️ Almuerzos:</span>
+                            <span class="font-semibold">423 de 600</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-secondary h-2 rounded-full" style="width: 70%"></div>
+                        </div>
+                        <div class="pt-2 border-t">
+                            <div class="flex justify-between items-center text-sm md:text-base">
+                                <span class="text-gray-700 font-medium">Total raciones:</span>
+                                <span class="font-bold text-primary">779</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Casa Adulto Mayor -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-gray-800 text-sm md:text-base">Casa Adulto Mayor - Bocanegra</h4>
+                        <span class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-sm md:text-base">
+                            <span class="text-gray-600">🌅 Desayunos:</span>
+                            <span class="font-semibold">100 de 200</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-400 h-2 rounded-full" style="width: 50%"></div>
+                        </div>
+                        <div class="flex justify-between items-center text-sm md:text-base">
+                            <span class="text-gray-600">🍽️ Almuerzos:</span>
+                            <span class="font-semibold">200 de 200</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-secondary h-2 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <div class="pt-2 border-t">
+                            <div class="flex justify-between items-center text-sm md:text-base">
+                                <span class="text-gray-700 font-medium">Total raciones:</span>
+                                <span class="font-bold text-primary">300</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actividad Reciente -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-md p-4 md:p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-xl md:text-2xl mr-3">📋</span>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-800">Actividad Reciente</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl md:text-2xl">🍽️</span>
+                            <div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">Almuerzo registrado</p>
+                                <p class="text-xs md:text-sm text-gray-600">DNI: 12345678 - Maria Carmen Rodriguez</p>
+                            </div>
+                        </div>
+                        <span class="text-xs md:text-sm text-gray-500">12:30</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl md:text-2xl">🌅</span>
+                            <div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">Desayuno registrado</p>
+                                <p class="text-xs md:text-sm text-gray-600">DNI: 87654321 - Carlos Alberto Mendoza</p>
+                            </div>
+                        </div>
+                        <span class="text-xs md:text-sm text-gray-500">08:15</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl md:text-2xl">➕</span>
+                            <div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">Nuevo beneficiario registrado</p>
+                                <p class="text-xs md:text-sm text-gray-600">DNI: 11111111 - Ana Sofia Gutierrez</p>
+                            </div>
+                        </div>
+                        <span class="text-xs md:text-sm text-gray-500">07:45</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 md:py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 md:w-10 h-8 md:h-10 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-base md:text-lg">🍽️</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold">ComedorDigital</h3>
+                    </div>
+                    <p class="text-gray-300 text-xs md:text-sm">
+                        Sistema de gestión digital para comedores populares de la Municipalidad Provincial Constitucional del Callao.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm md:text-base">Contacto</h4>
+                    <div class="space-y-2 text-xs md:text-sm text-gray-300">
+                        <p>📧 comedordigital@municallao.gob.pe</p>
+                        <p>📞 (01) 429-6141</p>
+                        <p>📍 Av. Oscar R. Benavides 123, Callao</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm md:text-base">Soporte Técnico</h4>
+                    <div class="space-y-2 text-xs md:text-sm text-gray-300">
+                        <p>🕒 Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+                        <p>📱 Whatsapp: (51) 999-888-777</p>
+                        <p>💬 soporte@municallao.gob.pe</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 md:mt-8 pt-4 md:pt-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-xs md:text-sm text-gray-400">
+                        © 2025 Municipalidad Provincial Constitucional del Callao. Todos los derechos reservados.
+                    </p>
+                    <p class="text-xs md:text-sm text-gray-400 mt-2 md:mt-0">
+                        Versión 1.0 - Sistema MVP
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        function buscarBeneficiario() {
+            const dni = document.getElementById('dniInput').value;
+            if (dni.length === 8) {
+                // Simular búsqueda
+                document.getElementById('beneficiarioInfo').style.display = 'block';
+                document.getElementById('botonesRegistro').style.display = 'flex';
+                
+                document.getElementById('nombreBeneficiario').textContent = 'Juan Carlos Mendoza';
+                document.getElementById('dniBeneficiario').textContent = dni;
+                document.getElementById('comedorBeneficiario').textContent = 'Teresa Izquierdo';
+            } else {
+                alert('Por favor ingrese un DNI válido de 8 dígitos');
+            }
+        }
+
+        // Permitir búsqueda con Enter
+        document.getElementById('dniInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarBeneficiario();
+            }
+        });
+
+        // Cerrar menú móvil al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('mobile-menu-btn');
+            
+            if (!menu.contains(event.target) && !btn.contains(event.target)) {
+                menu.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
