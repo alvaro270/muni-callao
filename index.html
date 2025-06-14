@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +21,7 @@
     </script>
 
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
     <header class="bg-white shadow-md border-b border-gray-200">
@@ -38,7 +40,8 @@
 
                 <!-- Logo Callao (Derecha) -->
                 <div class="flex items-center flex-shrink-0">
-                    <img src="./assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos" class="h-12 lg:h-16 w-auto">
+                    <img src="./assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos"
+                        class="h-12 lg:h-16 w-auto">
                 </div>
             </div>
 
@@ -67,23 +70,29 @@
         <div class="container mx-auto px-4">
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center justify-center space-x-1 lg:space-x-2 py-3">
-                <button class="bg-white text-primary px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 shadow-sm">
+                <button
+                    class="bg-white text-primary px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 shadow-sm">
                     <span>🏠</span>
                     <span>Dashboard</span>
                 </button>
-                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                <button
+                    class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
                     <span>➕</span>
                     <span>Registrar</span>
                 </button>
-                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                <button
+                    class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
                     <span>🍽️</span>
                     <span>Entregas</span>
                 </button>
-                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                <a href="./beneficiario/beneficiario.html"
+                    class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
                     <span>👥</span>
                     <span>Beneficiarios</span>
-                </button>
-                <button class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+                </a>
+
+                <button
+                    class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
                     <span>📊</span>
                     <span>Reportes</span>
                 </button>
@@ -93,17 +102,17 @@
             <div class="md:hidden">
                 <!-- Mobile Menu Button -->
                 <div class="flex items-center justify-between py-3">
-                    <button class="bg-white text-primary px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 shadow-sm">
+                    <button
+                        class="bg-white text-primary px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 shadow-sm">
                         <span>🏠</span>
                         <span>Dashboard</span>
                     </button>
-                    <button 
-                        id="mobile-menu-btn"
+                    <button id="mobile-menu-btn"
                         class="text-white hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors"
-                        onclick="toggleMobileMenu()"
-                    >
+                        onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                 </div>
@@ -111,19 +120,23 @@
                 <!-- Mobile Menu Dropdown -->
                 <div id="mobile-menu" class="mobile-menu">
                     <div class="pb-3 space-y-2">
-                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                        <button
+                            class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
                             <span>➕</span>
                             <span>Registrar</span>
                         </button>
-                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                        <button
+                            class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
                             <span>🍽️</span>
                             <span>Entregas</span>
                         </button>
-                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                        <button
+                            class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
                             <span>👥</span>
                             <span>Beneficiarios</span>
                         </button>
-                        <button class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                        <button
+                            class="w-full text-left text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
                             <span>📊</span>
                             <span>Reportes</span>
                         </button>
@@ -151,7 +164,7 @@
                 <span class="text-xl md:text-2xl mr-3">📊</span>
                 <h3 class="text-lg md:text-xl font-bold text-gray-800">Estadísticas del Día</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <!-- Desayunos -->
                 <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-orange-400">
@@ -218,27 +231,24 @@
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium text-gray-700 mb-1">DNI del Beneficiario</label>
-                            <input 
-                                type="text" 
-                                placeholder="Ingrese DNI aquí" 
+                            <input type="text" placeholder="Ingrese DNI aquí"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm md:text-base"
-                                id="dniInput"
-                                maxlength="8"
-                            >
+                                id="dniInput" maxlength="8">
                         </div>
                         <div class="flex items-end">
-                            <button 
+                            <button
                                 class="bg-secondary hover:bg-teal-600 text-white px-4 md:px-6 py-3 rounded-lg font-medium transition-colors w-full md:w-auto text-sm md:text-base"
-                                onclick="buscarBeneficiario()"
-                            >
+                                onclick="buscarBeneficiario()">
                                 🔍 Buscar
                             </button>
                         </div>
                     </div>
 
                     <!-- Panel de Información del Beneficiario -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4" id="beneficiarioInfo" style="display: none;">
-                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">👤 Información del Beneficiario</h4>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4" id="beneficiarioInfo"
+                        style="display: none;">
+                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">👤 Información del
+                            Beneficiario</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
                             <div>
                                 <strong class="text-gray-700">Beneficiario:</strong>
@@ -260,12 +270,15 @@
                     </div>
 
                     <!-- Botones de Registro -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center" id="botonesRegistro" style="display: none;">
-                        <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center" id="botonesRegistro"
+                        style="display: none;">
+                        <button
+                            class="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
                             <span>🌅</span>
                             <span>Registrar Desayuno</span>
                         </button>
-                        <button class="bg-primary hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+                        <button
+                            class="bg-primary hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
                             <span>🍽️</span>
                             <span>Registrar Almuerzo</span>
                         </button>
@@ -280,13 +293,14 @@
                 <span class="text-xl md:text-2xl mr-3">🏢</span>
                 <h3 class="text-lg md:text-xl font-bold text-gray-800">Resumen por Comedores</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                 <!-- Teresa Izquierdo -->
                 <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="font-bold text-gray-800 text-sm md:text-base">Teresa Izquierdo</h4>
-                        <span class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
+                        <span
+                            class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
                     </div>
                     <div class="space-y-3">
                         <div class="flex justify-between items-center text-sm md:text-base">
@@ -316,7 +330,8 @@
                 <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="font-bold text-gray-800 text-sm md:text-base">Casa Adulto Mayor - Bocanegra</h4>
-                        <span class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
+                        <span
+                            class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium">Activo</span>
                     </div>
                     <div class="space-y-3">
                         <div class="flex justify-between items-center text-sm md:text-base">
@@ -376,7 +391,8 @@
                         <div class="flex items-center space-x-3">
                             <span class="text-xl md:text-2xl">➕</span>
                             <div>
-                                <p class="font-medium text-gray-800 text-sm md:text-base">Nuevo beneficiario registrado</p>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">Nuevo beneficiario registrado
+                                </p>
                                 <p class="text-xs md:text-sm text-gray-600">DNI: 11111111 - Ana Sofia Gutierrez</p>
                             </div>
                         </div>
@@ -399,10 +415,11 @@
                         <h3 class="text-lg md:text-xl font-bold">ComedorDigital</h3>
                     </div>
                     <p class="text-gray-300 text-xs md:text-sm">
-                        Sistema de gestión digital para comedores populares de la Municipalidad Provincial Constitucional del Callao.
+                        Sistema de gestión digital para comedores populares de la Municipalidad Provincial
+                        Constitucional del Callao.
                     </p>
                 </div>
-                
+
                 <div>
                     <h4 class="font-semibold mb-4 text-sm md:text-base">Contacto</h4>
                     <div class="space-y-2 text-xs md:text-sm text-gray-300">
@@ -411,7 +428,7 @@
                         <p>📍 Av. Oscar R. Benavides 123, Callao</p>
                     </div>
                 </div>
-                
+
                 <div>
                     <h4 class="font-semibold mb-4 text-sm md:text-base">Soporte Técnico</h4>
                     <div class="space-y-2 text-xs md:text-sm text-gray-300">
@@ -421,7 +438,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-700 mt-6 md:mt-8 pt-4 md:pt-6">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <p class="text-xs md:text-sm text-gray-400">
@@ -435,6 +452,7 @@
         </div>
     </footer>
 
-   <script src="js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
