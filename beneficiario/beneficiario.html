@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datos del Beneficiario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0B42A0',
+            secondary: '#10B099'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-3xl bg-white shadow-lg rounded-xl p-6 space-y-6 border-t-4 border-primary">
+    <h2 class="text-2xl font-bold text-gray-800 border-b pb-4 flex items-center space-x-2">
+      <span>👤</span><span>Datos del Beneficiario</span>
+    </h2>
+
+    <!-- Campo: Nombre -->
+    <div class="flex flex-col md:flex-row items-start gap-2">
+      <label class="w-40 font-medium text-gray-700">Nombre Completo: <span class="text-red-500">*</span></label>
+      <input type="text" placeholder="[Ingrese nombre completo]"
+             class="flex-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+    </div>
+
+    <!-- Campo: DNI -->
+    <div class="flex flex-col md:flex-row items-start gap-2">
+      <label class="w-40 font-medium text-gray-700">DNI: <span class="text-red-500">*</span></label>
+      <input type="text" placeholder="[12345678]" maxlength="8"
+             class="flex-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+    </div>
+
+    <!-- Campo: Comedor (standby) -->
+    <div class="flex flex-col md:flex-row items-start gap-2">
+      <label class="w-40 font-medium text-gray-700">Comedor: <span class="text-red-500">*</span></label>
+      <select class="flex-1 w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-sm text-gray-600">
+        <option disabled selected>Seleccionar Comedor...</option>
+      </select>
+    </div>
+
+    <!-- Campo: Estado -->
+    <div class="flex flex-col md:flex-row items-start gap-2">
+      <label class="w-40 font-medium text-gray-700">Estado:</label>
+      <input type="text" value="Activo" readonly
+             class="flex-1 w-full border border-gray-200 bg-gray-100 rounded-lg px-4 py-2 text-green-600 font-medium text-sm" />
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end space-x-4 pt-4 border-t mt-6">
+      <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-lg text-sm font-medium">Cancelar</button>
+      <button class="bg-primary hover:bg-blue-800 text-white px-5 py-2 rounded-lg text-sm font-medium">Guardar</button>
+    </div>
+  </div>
+   <!-- Aqui se guardan los datos en localstorage-->
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const guardarBtn = document.querySelector("button.bg-primary");
+    const nombreInput = document.querySelector("input[placeholder='[Ingrese nombre completo]']");
+    const dniInput = document.querySelector("input[placeholder='[12345678]']");
+
+    guardarBtn.addEventListener("click", () => {
+      const nombre = nombreInput.value.trim();
+      const dni = dniInput.value.trim();
+
+      if (!nombre || !dni) {
+        alert("Por favor completa el nombre y el DNI.");
+        return;
+      }
+
+      const nuevoBeneficiario = { nombre, dni };
+
+      const beneficiarios = JSON.parse(localStorage.getItem("beneficiarios")) || [];
+
+      const yaExiste = beneficiarios.some(b => b.dni === dni);
+      if (yaExiste) {
+        alert("Ya existe un beneficiario con ese DNI.");
+        return;
+      }
+
+      beneficiarios.push(nuevoBeneficiario);
+      localStorage.setItem("beneficiarios", JSON.stringify(beneficiarios));
+
+      alert("✅ Beneficiario guardado correctamente.");
+
+      // Limpiar formulario
+      nombreInput.value = "";
+      dniInput.value = "";
+    });
+  });
+</script>
+
+
+</body>
+</html>
 
