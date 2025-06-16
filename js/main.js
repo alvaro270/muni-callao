@@ -1,4 +1,4 @@
- function toggleMobileMenu() {
+        function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('open');
         }
@@ -19,10 +19,12 @@
         }
 
         // Permitir búsqueda con Enter
-        document.getElementById('dniInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                buscarBeneficiario();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('dniInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    buscarBeneficiario();
+                }
+            });
         });
 
         // Cerrar menú móvil al hacer clic fuera
