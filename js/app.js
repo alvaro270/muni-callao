@@ -10,7 +10,7 @@
                 document.getElementById('beneficiarioInfo').style.display = 'block';
                 document.getElementById('botonesRegistro').style.display = 'flex';
                 
-                document.getElementById('nombreBeneficiario').textContent = 'Juan Carlos Mendoza';
+                document.getElementById('nombreBeneficiario').textContent = ' Mendoza';
                 document.getElementById('dniBeneficiario').textContent = dni;
                 document.getElementById('comedorBeneficiario').textContent = 'Teresa Izquierdo';
             } else {
