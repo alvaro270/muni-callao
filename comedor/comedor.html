@@ -1,1 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComedorDigital - Gestión de Comedores</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="comedor.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B42A0',
+                        secondary: '#10B099'
+                    }
+                }
+            }
+        }
+    </script>
+   
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <!-- Desktop Header -->
+            <div class="hidden md:flex items-center justify-between h-20 py-4">
+                <!-- Logo Municipalidad (Izquierda) -->
+                <div class="flex items-center flex-shrink-0">
+                    <img src="../assets/img/logo.png" alt="Logo Municipalidad del callao" class="h-12 lg:h-16 w-auto">
+                </div>
 
+                <!-- Logo Central ComedorDigital -->
+                <div class="flex items-center justify-center flex-grow">
+                    <h1 class="text-xl lg:text-2xl font-bold text-gray-800">ComedorDigital</h1>
+                </div>
+
+                <!-- Logo Callao (Derecha) -->
+                <div class="flex items-center flex-shrink-0">
+                    <img src="../assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos" class="h-12 lg:h-16 w-auto">
+                </div>
+            </div>
+
+            <!-- Mobile Header -->
+            <div class="md:hidden flex items-center justify-between h-16 py-2">
+                <!-- Logo Municipalidad -->
+                <div class="flex items-center">
+                    <img src="../assets/img/logo.png" alt="Logo Municipalidad del callao" class="h-10 w-auto">
+                </div>
+
+                <!-- Título Central -->
+                <div class="flex-grow text-center">
+                    <h1 class="text-lg font-bold text-gray-800">ComedorDigital</h1>
+                </div>
+
+                <!-- Logo Callao -->
+                <div class="flex items-center">
+                    <img src="../assets/img/PROGRESAMOS_TODOS_2.png" alt="Callao Progresamos todos" class="h-10 w-auto">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-primary shadow-sm">
+        <div class="container mx-auto px-4">
+            <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center justify-center space-x-1 lg:space-x-2 py-3">
+    <a href="../index.html" class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+        <span>🏠</span>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="comedores.html" class="bg-white text-primary px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 shadow-sm">
+        <span>🏢</span>
+        <span>Comedores</span>
+    </a>
+
+    <a href="../registrar.html" class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+        <span>➕</span>
+        <span>Registrar</span>
+    </a>
+
+    <a href="../entregas/entregas.html" class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+        <span>🍽️</span>
+        <span>Entregas</span>
+    </a>
+
+    <a href="../beneficiario/beneficiario.html" class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+        <span>👥</span>
+        <span>Beneficiarios</span>
+    </a>
+
+    <a href="../reportes/reportes.html" class="text-white hover:bg-blue-700 px-3 lg:px-4 py-2 rounded-lg font-medium text-sm lg:text-base flex items-center space-x-2 transition-colors">
+        <span>📊</span>
+        <span>Reportes</span>
+    </a>
+</div>
+
+            <!-- Mobile Navigation -->
+            <div class="md:hidden">
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center justify-between py-3">
+                    <button class="bg-white text-primary px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 shadow-sm">
+                        <span>🏢</span>
+                        <span>Comedores</span>
+                    </button>
+                    <button 
+                        id="mobile-menu-btn"
+                        class="text-white hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors"
+                        onclick="mostrarMenuMovil()"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Dropdown -->
+                <div id="mobile-menu" class="mobile-menu">
+                    <div class="pb-3 space-y-2">
+                        <a href="../index.html" class="w-full block text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>🏠</span>
+                            <span>Dashboard</span>
+                        </a>
+
+                        <a href="registrar.html" class="w-full block text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>➕</span>
+                            <span>Registrar</span>
+                        </a>
+
+                        <a href="../entregas/entregas.html" class="w-full block text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>🍽️</span>
+                            <span>Entregas</span>
+                        </a>
+
+                        <a href="../beneficiario/beneficiario.html" class="w-full block text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>👥</span>
+                            <span>Beneficiarios</span>
+                        </a>
+
+                        <a href="../reporte/reportes.html" class="w-full block text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors">
+                            <span>📊</span>
+                            <span>Reportes</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Título y Fecha -->
+        <div class="mb-6">
+            <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
+                Gestión de Comedores 🏢
+            </h2>
+            <p class="text-gray-600 text-sm md:text-base">
+                Administra y supervisa todos los comedores populares
+            </p>
+        </div>
+
+        <!-- Estadísticas Rápidas -->
+        <section class="mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+                <!-- Total Comedores -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-primary">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Total Comedores</p>
+                            <p class="text-2xl md:text-3xl font-bold text-primary" id="totalComedores">0</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">🏢</div>
+                    </div>
+                </div>
+
+                <!-- Comedores Activos -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-green-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Activos</p>
+                            <p class="text-2xl md:text-3xl font-bold text-green-600" id="comedoresActivos">0</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">✅</div>
+                    </div>
+                </div>
+
+                <!-- Comedores Inactivos -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-red-500">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Inactivos</p>
+                            <p class="text-2xl md:text-3xl font-bold text-red-600" id="comedoresInactivos">0</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">❌</div>
+                    </div>
+                </div>
+
+                <!-- Capacidad Total -->
+                <div class="bg-white rounded-xl shadow-md p-4 md:p-6 card-hover border-l-4 border-secondary">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs md:text-sm font-medium text-gray-600 mb-1">Capacidad Total</p>
+                            <p class="text-2xl md:text-3xl font-bold text-secondary" id="capacidadTotal">0</p>
+                        </div>
+                        <div class="text-3xl md:text-4xl">🎯</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botón Agregar Comedor -->
+        <section class="mb-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-bold text-gray-800">Lista de Comedores</h3>
+                <button 
+                    onclick="mostrarModalAgregar()"
+                    class="bg-secondary hover:bg-teal-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 text-sm md:text-base"
+                >
+                    <span>➕</span>
+                    <span>Agregar Comedor</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Lista de Comedores -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <!-- Desktop Table -->
+                <div class="hidden md:block overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Comedor</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dirección</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capacidad</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Responsable</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaComedoresDesktop" class="bg-white divide-y divide-gray-200">
+                            <!-- Datos se cargan con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Cards -->
+                <div class="md:hidden" id="tarjetasComedoresMovil">
+                    <!-- Tarjetas se cargan con JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Agregar/Editar Comedor -->
+    <div id="modalComedor" class="modal">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-800" id="tituloModal">Agregar Nuevo Comedor</h3>
+                    <button onclick="cerrarModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="formularioComedor">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Comedor *</label>
+                            <input 
+                                type="text" 
+                                id="nombreComedor"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Ej: Teresa Izquierdo"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Dirección *</label>
+                            <input 
+                                type="text" 
+                                id="direccionComedor"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Ej: Jr. Supe 134 - Bellavista"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Capacidad Diaria *</label>
+                            <input 
+                                type="number" 
+                                id="capacidadComedor"
+                                required
+                                min="1"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Ej: 80"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Responsable *</label>
+                            <input 
+                                type="text" 
+                                id="responsableComedor"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Ej: Juana Soto"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
+                            <input 
+                                type="tel" 
+                                id="telefonoComedor"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Ej: 986-432-111"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Estado *</label>
+                            <select 
+                                id="estadoComedor"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            >
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4 mt-6">
+                        <button 
+                            type="button" 
+                            onclick="cerrarModal()"
+                            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded-lg font-medium transition-colors"
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit"
+                            class="flex-1 bg-primary hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors"
+                        >
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 md:py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 md:w-10 h-8 md:h-10 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-base md:text-lg">🍽️</span>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold">ComedorDigital</h3>
+                    </div>
+                    <p class="text-gray-300 text-xs md:text-sm">
+                        Sistema de gestión digital para comedores populares de la Municipalidad Provincial Constitucional del Callao.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm md:text-base">Contacto</h4>
+                    <div class="space-y-2 text-xs md:text-sm text-gray-300">
+                        <p>📧 comedordigital@municallao.gob.pe</p>
+                        <p>📞 (01) 429-6141</p>
+                        <p>📍 Av. Oscar R. Benavides 123, Callao</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4 text-sm md:text-base">Soporte Técnico</h4>
+                    <div class="space-y-2 text-xs md:text-sm text-gray-300">
+                        <p>🕒 Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+                        <p>📱 Whatsapp: (51) 999-888-777</p>
+                        <p>💬 soporte@municallao.gob.pe</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 md:mt-8 pt-4 md:pt-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-xs md:text-sm text-gray-400">
+                        © 2025 Municipalidad Provincial Constitucional del Callao. Todos los derechos reservados.
+                    </p>
+                    <p class="text-xs md:text-sm text-gray-400 mt-2 md:mt-0">
+                        Versión 1.0 - Sistema MVP
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="comedor.js"></script>
+        
+</body>
+</html>
