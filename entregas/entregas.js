@@ -26,6 +26,7 @@ const EntregasStore = {
 };
 
 // ===== CLASES Y MODELADO DE OBJETOS (POO) =====
+// No se necesitan cambios aquí, las clases son conceptuales.
 class Beneficiario {
     constructor(dni, nombre, comedor, activo = true) {
         if (!Beneficiario.validarDNI(dni)) {
@@ -33,7 +34,7 @@ class Beneficiario {
         }
         this.dni = dni;
         this.nombre = nombre;
-        this.comedor = comedor;
+        this.comedor = comedor; // Ahora 'comedor' es un objeto {id, nombre}
         this.activo = activo;
     }
     static validarDNI(dni) {
@@ -46,59 +47,25 @@ class Entrega {
         this.id = crypto.randomUUID();
         this.dni = dni;
         this.beneficiarioNombre = beneficiarioNombre;
-        this.comedor = comedor;
+        this.comedor = comedor; // Aquí también 'comedor' es el objeto {id, nombre}
         this.tipo = tipo;
         this.fechaISO = new Date().toISOString();
         this.registradoPor = usuario;
         this.estado = 'entregado';
-    }
-    get hora() {
-        return new Date(this.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
     }
 }
 
 // ===== SIMULACIÓN DE BASE DE DATOS (LocalStorage) =====
 class EntregasDatabase {
     constructor() {
+        // CAMBIO CLAVE: Nos aseguramos de usar exactamente las mismas claves de LocalStorage
+        // que los otros módulos para que los datos estén sincronizados.
         this.BENEFICIARIOS_KEY = 'beneficiarios';
-        this.ENTREGAS_KEY = 'comedorDigital_entregas';
-        // this._inicializarDatosSimulados();
+        this.ENTREGAS_KEY = 'comedorDigital_entregas'; // Mantenemos esta clave para las entregas
     }
 
-    // CORRECCIÓN: Lógica de inicialización mejorada.
-    // _inicializarDatosSimulados() {
-    //     // --- Carga de Beneficiarios ---
-    //     const beneficiariosData = localStorage.getItem(this.BENEFICIARIOS_KEY);
-    //     // Se crean los datos solo si no existen O si existen pero están vacíos.
-    //     if (!beneficiariosData || JSON.parse(beneficiariosData).length === 0) {
-    //         const beneficiarios = [
-    //             new Beneficiario('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo'),
-    //             new Beneficiario('87654321', 'Carlos Alberto Mendoza', 'Teresa Izquierdo'),
-    //             new Beneficiario('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra'),
-    //             new Beneficiario('22222222', 'José Luis Torres', 'Teresa Izquierdo'),
-    //             new Beneficiario('33333333', 'Rosa Elena Vásquez', 'Casa Adulto Mayor - Bocanegra'),
-    //             new Beneficiario('44444444', 'Juan Pérez Gonzáles', 'Teresa Izquierdo'),
-    //             new Beneficiario('55555555', 'Luisa Fernanda Castillo', 'Casa Adulto Mayor - Bocanegra'),
-    //         ];
-    //         localStorage.setItem(this.BENEFICIARIOS_KEY, JSON.stringify(beneficiarios));
-    //     }
-
-    //     // --- Carga de Entregas de Ejemplo para Hoy ---
-    //     const entregasData = localStorage.getItem(this.ENTREGAS_KEY);
-    //     // Creamos entregas de ejemplo para hoy solo si no hay ninguna entrega guardada.
-    //     if (!entregasData) {
-    //         const entregasDeEjemplo = [
-    //             new Entrega('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo', 'desayuno'),
-    //             new Entrega('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra', 'almuerzo'),
-    //         ];
-    //         // Simulamos que el desayuno se entregó hace una hora
-    //         const unaHoraAntes = new Date();
-    //         unaHoraAntes.setHours(unaHoraAntes.getHours() - 1);
-    //         entregasDeEjemplo[0].fechaISO = unaHoraAntes.toISOString();
-
-    //         localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(entregasDeEjemplo));
-    //     }
-    // }
+    // Ya no necesitamos inicializar datos aquí, porque los otros módulos (beneficiario, comedor)
+    // se encargan de crear sus propios datos. Esta vista solo los consume.
 
     buscarBeneficiarioPorDNI(dni) {
         return new Promise((resolve, reject) => {
@@ -140,10 +107,7 @@ class EntregasDatabase {
             try {
                 const todasLasEntregasJSON = localStorage.getItem(this.ENTREGAS_KEY) || '[]';
                 const todasLasEntregas = JSON.parse(todasLasEntregasJSON);
-                
-                // Añadimos la nueva entrega a la lista completa
                 todasLasEntregas.push(entrega);
-                
                 localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(todasLasEntregas));
                 resolve(entrega);
             } catch (error) {
@@ -194,10 +158,11 @@ async function handleRegistrarEntrega(tipo) {
 
     EntregasStore.setState({ loading: true });
     
+    // Al crear la nueva entrega, pasamos el objeto 'comedor' completo.
     const nuevaEntrega = new Entrega(
         beneficiarioActual.dni,
         beneficiarioActual.nombre,
-        beneficiarioActual.comedor,
+        beneficiarioActual.comedor, 
         tipo
     );
 
@@ -239,7 +204,7 @@ async function inicializarApp() {
 }
 
 // ===== RENDERIZADO Y MANEJO DEL DOM =====
-function renderizarPanelBeneficiario({ beneficiarioActual, entregasHoy, loading }) {
+function renderizarPanelBeneficiario({ beneficiarioActual }) {
     const section = document.getElementById('beneficiarioSection');
     if (!beneficiarioActual) {
         section.style.display = 'none';
@@ -249,39 +214,10 @@ function renderizarPanelBeneficiario({ beneficiarioActual, entregasHoy, loading 
 
     document.getElementById('beneficiarioNombre').textContent = beneficiarioActual.nombre;
     document.getElementById('beneficiarioDNI').textContent = beneficiarioActual.dni;
-    document.getElementById('beneficiarioComedor').textContent = beneficiarioActual.comedor;
 
-    const entregaDesayuno = entregasHoy.find(e => e.dni === beneficiarioActual.dni && e.tipo === 'desayuno');
-    const entregaAlmuerzo = entregasHoy.find(e => e.dni === beneficiarioActual.dni && e.tipo === 'almuerzo');
-
-    const estadoDesayunoEl = document.getElementById('estadoDesayuno');
-    const btnDesayuno = document.getElementById('btnDesayuno');
-    if (entregaDesayuno) {
-        const hora = new Date(entregaDesayuno.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-        estadoDesayunoEl.innerHTML = `✅ Entregado a las ${hora}`;
-        estadoDesayunoEl.className = 'font-bold text-green-600';
-        btnDesayuno.disabled = true;
-    } else {
-        estadoDesayunoEl.textContent = '⏳ Pendiente';
-        estadoDesayunoEl.className = 'font-bold text-orange-600';
-        btnDesayuno.disabled = false;
-    }
-
-    const estadoAlmuerzoEl = document.getElementById('estadoAlmuerzo');
-    const btnAlmuerzo = document.getElementById('btnAlmuerzo');
-    if (entregaAlmuerzo) {
-        const hora = new Date(entregaAlmuerzo.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-        estadoAlmuerzoEl.innerHTML = `✅ Entregado a las ${hora}`;
-        estadoAlmuerzoEl.className = 'font-bold text-green-600';
-        btnAlmuerzo.disabled = true;
-    } else {
-        estadoAlmuerzoEl.textContent = '⏳ Pendiente';
-        estadoAlmuerzoEl.className = 'font-bold text-blue-600';
-        btnAlmuerzo.disabled = false;
-    }
-    
-    btnDesayuno.disabled = btnDesayuno.disabled || loading;
-    btnAlmuerzo.disabled = btnAlmuerzo.disabled || loading;
+    // CORRECCIÓN CLAVE 1: Acceder a la propiedad 'nombre' del objeto 'comedor'.
+    // Usamos 'optional chaining' (?.) por si el objeto comedor no existiera.
+    document.getElementById('beneficiarioComedor').textContent = beneficiarioActual.comedor?.nombre || 'No asignado';
 }
 
 function renderizarHistorial({ entregasHoy, filtros }) {
@@ -290,7 +226,8 @@ function renderizarHistorial({ entregasHoy, filtros }) {
     tbody.innerHTML = '';
 
     const entregasFiltradas = entregasHoy
-        .filter(e => filtros.comedor ? e.comedor === filtros.comedor : true)
+        // CORRECCIÓN: Al filtrar, también comparamos con la propiedad 'nombre' del objeto 'comedor'.
+        .filter(e => filtros.comedor ? e.comedor?.nombre === filtros.comedor : true)
         .filter(e => filtros.tipo ? e.tipo === filtros.tipo : true)
         .sort((a, b) => new Date(b.fechaISO) - new Date(a.fechaISO));
 
@@ -302,11 +239,13 @@ function renderizarHistorial({ entregasHoy, filtros }) {
             const tr = document.createElement('tr');
             tr.className = 'border-b hover:bg-gray-50';
             const hora = new Date(entrega.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            // CORRECCIÓN CLAVE 2: Mostrar 'entrega.comedor.nombre' en la tabla.
             tr.innerHTML = `
                 <td class="px-4 py-3">${hora}</td>
                 <td class="px-4 py-3 font-medium text-gray-800">${entrega.dni}</td>
                 <td class="px-4 py-3">${entrega.beneficiarioNombre}</td>
-                <td class="px-4 py-3">${entrega.comedor}</td>
+                <td class="px-4 py-3">${entrega.comedor?.nombre || 'No especificado'}</td>
                 <td class="px-4 py-3">
                     <span class="px-2 py-1 rounded-full text-xs font-medium ${entrega.tipo === 'desayuno' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}">
                         ${entrega.tipo === 'desayuno' ? '🌅 Desayuno' : '🍽️ Almuerzo'}
@@ -375,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         limpiarBtn.onclick = handleLimpiarFiltros;
     }
 
+    // Suscribimos los renderizadores que dependen del estado global
     EntregasStore.subscribe(renderizarPanelBeneficiario);
     EntregasStore.subscribe(renderizarHistorial);
     EntregasStore.subscribe(renderizarEstadisticas);
@@ -388,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const actualizarFiltros = () => {
         EntregasStore.setState({
             filtros: {
+                // Para el filtro, usamos el valor del select, que es el nombre del comedor
                 comedor: filterComedor.value,
                 tipo: filterTipo.value
             }
