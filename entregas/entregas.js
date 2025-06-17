@@ -60,45 +60,45 @@ class Entrega {
 // ===== SIMULACIÓN DE BASE DE DATOS (LocalStorage) =====
 class EntregasDatabase {
     constructor() {
-        this.BENEFICIARIOS_KEY = 'comedorDigital_beneficiarios';
+        this.BENEFICIARIOS_KEY = 'beneficiarios';
         this.ENTREGAS_KEY = 'comedorDigital_entregas';
-        this._inicializarDatosSimulados();
+        // this._inicializarDatosSimulados();
     }
 
     // CORRECCIÓN: Lógica de inicialización mejorada.
-    _inicializarDatosSimulados() {
-        // --- Carga de Beneficiarios ---
-        const beneficiariosData = localStorage.getItem(this.BENEFICIARIOS_KEY);
-        // Se crean los datos solo si no existen O si existen pero están vacíos.
-        if (!beneficiariosData || JSON.parse(beneficiariosData).length === 0) {
-            const beneficiarios = [
-                new Beneficiario('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo'),
-                new Beneficiario('87654321', 'Carlos Alberto Mendoza', 'Teresa Izquierdo'),
-                new Beneficiario('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra'),
-                new Beneficiario('22222222', 'José Luis Torres', 'Teresa Izquierdo'),
-                new Beneficiario('33333333', 'Rosa Elena Vásquez', 'Casa Adulto Mayor - Bocanegra'),
-                new Beneficiario('44444444', 'Juan Pérez Gonzáles', 'Teresa Izquierdo'),
-                new Beneficiario('55555555', 'Luisa Fernanda Castillo', 'Casa Adulto Mayor - Bocanegra'),
-            ];
-            localStorage.setItem(this.BENEFICIARIOS_KEY, JSON.stringify(beneficiarios));
-        }
+    // _inicializarDatosSimulados() {
+    //     // --- Carga de Beneficiarios ---
+    //     const beneficiariosData = localStorage.getItem(this.BENEFICIARIOS_KEY);
+    //     // Se crean los datos solo si no existen O si existen pero están vacíos.
+    //     if (!beneficiariosData || JSON.parse(beneficiariosData).length === 0) {
+    //         const beneficiarios = [
+    //             new Beneficiario('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo'),
+    //             new Beneficiario('87654321', 'Carlos Alberto Mendoza', 'Teresa Izquierdo'),
+    //             new Beneficiario('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra'),
+    //             new Beneficiario('22222222', 'José Luis Torres', 'Teresa Izquierdo'),
+    //             new Beneficiario('33333333', 'Rosa Elena Vásquez', 'Casa Adulto Mayor - Bocanegra'),
+    //             new Beneficiario('44444444', 'Juan Pérez Gonzáles', 'Teresa Izquierdo'),
+    //             new Beneficiario('55555555', 'Luisa Fernanda Castillo', 'Casa Adulto Mayor - Bocanegra'),
+    //         ];
+    //         localStorage.setItem(this.BENEFICIARIOS_KEY, JSON.stringify(beneficiarios));
+    //     }
 
-        // --- Carga de Entregas de Ejemplo para Hoy ---
-        const entregasData = localStorage.getItem(this.ENTREGAS_KEY);
-        // Creamos entregas de ejemplo para hoy solo si no hay ninguna entrega guardada.
-        if (!entregasData) {
-            const entregasDeEjemplo = [
-                new Entrega('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo', 'desayuno'),
-                new Entrega('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra', 'almuerzo'),
-            ];
-            // Simulamos que el desayuno se entregó hace una hora
-            const unaHoraAntes = new Date();
-            unaHoraAntes.setHours(unaHoraAntes.getHours() - 1);
-            entregasDeEjemplo[0].fechaISO = unaHoraAntes.toISOString();
+    //     // --- Carga de Entregas de Ejemplo para Hoy ---
+    //     const entregasData = localStorage.getItem(this.ENTREGAS_KEY);
+    //     // Creamos entregas de ejemplo para hoy solo si no hay ninguna entrega guardada.
+    //     if (!entregasData) {
+    //         const entregasDeEjemplo = [
+    //             new Entrega('12345678', 'María Carmen Rodríguez', 'Teresa Izquierdo', 'desayuno'),
+    //             new Entrega('11111111', 'Ana Sofia Gutierrez', 'Casa Adulto Mayor - Bocanegra', 'almuerzo'),
+    //         ];
+    //         // Simulamos que el desayuno se entregó hace una hora
+    //         const unaHoraAntes = new Date();
+    //         unaHoraAntes.setHours(unaHoraAntes.getHours() - 1);
+    //         entregasDeEjemplo[0].fechaISO = unaHoraAntes.toISOString();
 
-            localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(entregasDeEjemplo));
-        }
-    }
+    //         localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(entregasDeEjemplo));
+    //     }
+    // }
 
     buscarBeneficiarioPorDNI(dni) {
         return new Promise((resolve, reject) => {
