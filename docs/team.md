@@ -7,7 +7,7 @@ Este documento define los roles y responsabilidades del equipo de desarrollo par
 | ------------- |:-------------:|:-------------:|:-------------:|
 | Álvaro Huamán |🏅 Líder Técnico|Supervisión técnica, arquitectura de datos, desarrollo de backend y frontend, integración final.| Control de Entregas |
 | Carlos Romano | 🎨 Desarrollador Frontend/Backend | Diseño de interfaz, experiencia de usuario, desarrollo de componentes visuales. | Dashboard y Comedores |
-| Christian [Apellido] | 🗃️ Desarrollador Frontend/Backend | Modelado de datos, lógica de negocio, gestión de la información de beneficiarios. | Gestión de Beneficiarios |
+| Christian Parra | 🗃️ Desarrollador Frontend/Backend | Modelado de datos, lógica de negocio, gestión de la información de beneficiarios. | Gestión de Beneficiarios |
 
 ## 2. Asignación de Roles Complementarios
 Para asegurar una cobertura completa de las necesidades del proyecto, se asignan los siguientes roles complementarios:
