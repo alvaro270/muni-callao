@@ -1,200 +1,112 @@
-# Historias de Usuario
-## Sistema de Gestión de Comedores Populares
+# Historias de Usuario - ComedorDigital
+## Módulo: Gestión de Comedores
+### Historia de Usuario: Registrar un nuevo comedor
+**Como** administrador del sistema,
 
-### Historia de Usuario 1: Registrar Beneficiario
-**Como** administrador del comedor
-**Quiero** registrar nuevos beneficiarios con su información personal y foto
-**Para** mantener un padrón actualizado y evitar duplicados
+**Quiero** poder añadir la información de un nuevo comedor (nombre, dirección, capacidad, etc.),
 
-#### Criterios de Aceptación:
-1. **Dado** que soy un administrador autenticado
-   **Cuando** ingreso un DNI nuevo en el formulario de registro
-   **Entonces** el sistema me permite completar todos los datos del beneficiario
+**Para** mantener el listado de comedores actualizado y disponible para la asignación de beneficiarios.
 
-2. **Dado** que intento registrar un DNI que ya existe
-   **Cuando** envío el formulario
-   **Entonces** el sistema muestra un mensaje de error indicando que el beneficiario ya está registrado
+### Criterios de Aceptación:
+1. **Dado** que estoy en la vista de "Gestión de Comedores",
 
-3. **Dado** que completo todos los campos obligatorios
-   **Cuando** subo una foto del beneficiario
-   **Entonces** el sistema guarda la imagen y crea el registro exitosamente
+    **Cuando** relleno el formulario con datos válidos y hago clic en "Guardar",
 
-#### Notas Técnicas:
-- **Componentes**: FormularioBeneficiario, ValidadorDNI, SubidorImagen
-- **Modelos**: Beneficiario {id, dni, nombres, apellidos, telefono, direccion, comedor_id, foto, fecha_registro}
-- **Validaciones**: DNI único, campos obligatorios, formato de imagen
+    **Entonces** el nuevo comedor debe aparecer en la lista de comedores y persistir en LocalStorage.
 
----
+2. **Dado** que intento guardar un comedor sin un nombre o dirección,
 
-### Historia de Usuario 2: Controlar Entrega de Raciones
-**Como** responsable del comedor
-**Quiero** registrar la entrega de raciones diarias a beneficiarios
-**Para** controlar que cada persona reciba máximo una ración por tipo por día
+    **Cuando** hago clic en "Guardar",
 
-#### Criterios de Aceptación:
-1. **Dado** que ingreso el DNI de un beneficiario válido
-   **Cuando** selecciono el tipo de ración (desayuno o almuerzo)
-   **Entonces** el sistema verifica si ya recibió esa ración el día actual
+    **Entonces** el sistema debe mostrarme un mensaje de error indicando los campos obligatorios.
 
-2. **Dado** que el beneficiario no ha recibido la ración solicitada hoy
-   **Cuando** confirmo la entrega
-   **Entonces** el sistema registra la entrega con fecha, hora y usuario
+### Notas Técnicas:
+* Componentes: Formulario modal, tabla de comedores.
 
-3. **Dado** que el beneficiario ya recibió esa ración hoy
-   **Cuando** intento registrar otra entrega del mismo tipo
-   **Entonces** el sistema muestra una alerta y no permite la entrega
+* Modelo de Datos (comedor): ```{ id: number, nombre: string, direccion: string, capacidad: number, responsable: string, telefono: string, estado: 'Activo' | 'Inactivo' }```
 
-#### Notas Técnicas:
-- **Componentes**: BuscadorBeneficiario, ControlEntrega, ValidadorRacion
-- **Modelos**: Entrega {id, beneficiario_id, tipo_racion, fecha, hora, usuario_id, comedor_id}
-- **Validaciones**: Una ración por tipo por día, beneficiario activo
+* Interacciones: El botón "Agregar Comedor" abre el modal. El botón "Guardar" del modal valida y guarda los datos.
 
----
+## Módulo: Gestión de Beneficiarios
+### Historia de Usuario: Registrar un nuevo beneficiario
+**Como** personal administrativo,
 
-### Historia de Usuario 3: Gestionar Comedores
-**Como** supervisor municipal
-**Quiero** administrar la información de los comedores y sus responsables
-**Para** mantener control sobre las ubicaciones y capacidades de atención
+**Quiero** registrar a un nuevo beneficiario con su DNI, nombre y asignarle un comedor existente,
 
-#### Criterios de Aceptación:
-1. **Dado** que soy un supervisor autenticado
-   **Cuando** registro un nuevo comedor
-   **Entonces** el sistema guarda la ubicación, capacidad y responsable asignado
+**Para** que pueda recibir las raciones de alimentos.
 
-2. **Dado** que visualizo la lista de comedores
-   **Cuando** selecciono un comedor específico
-   **Entonces** puedo ver sus estadísticas de atención y modificar su información
+### Criterios de Aceptación:
+1. **Dado** que estoy en la vista de "Gestión de Beneficiarios",
 
-3. **Dado** que asigno un responsable a un comedor
-   **Cuando** guardo los cambios
-   **Entonces** el responsable puede acceder al control de entregas de ese comedor únicamente
+    **Cuando** completo el formulario y selecciono un comedor de la lista desplegable,
 
-#### Notas Técnicas:
-- **Componentes**: FormularioComedor, ListaComedores, AsignadorResponsable
-- **Modelos**: Comedor {id, nombre, direccion, capacidad_maxima, responsable_id, activo}
-- **Relaciones**: Comedor-Usuario (responsable), Comedor-Beneficiario
+    **Entonces** el nuevo beneficiario se guarda y aparece en la tabla de registrados.
 
----
+2. **Dado** que intento registrar un DNI que ya existe,
 
-### Historia de Usuario 4: Visualizar Dashboard de Estadísticas
-**Como** administrador general
-**Quiero** ver un resumen de las actividades diarias en tiempo real
-**Para** tomar decisiones informadas sobre la gestión de los comedores
+    **Cuando** hago clic en "Guardar",
 
-#### Criterios de Aceptación:
-1. **Dado** que accedo al dashboard principal
-   **Cuando** la página se carga
-   **Entonces** veo el resumen del día actual: raciones entregadas, beneficiarios atendidos, comedores activos
+    **Entonces** el sistema debe mostrar un error de duplicado.
 
-2. **Dado** que selecciono un rango de fechas
-   **Cuando** aplico los filtros
-   **Entonces** las estadísticas se actualizan mostrando los datos del período seleccionado
+### Notas Técnicas:
+* Componentes: Formulario de registro, lista desplegable (```<select>```) de comedores, tabla de beneficiarios.
 
-3. **Dado** que visualizo las estadísticas por comedor
-   **Cuando** hago clic en un comedor específico
-   **Entonces** veo el detalle de entregas y beneficiarios de ese comedor
+* Modelo de Datos (beneficiario): ```{ dni: string, nombre: string, comedor: {id: number, nombre: string}, estado: 'Activo' | 'Inactivo', fechaRegistro: string }```
 
-#### Notas Técnicas:
-- **Componentes**: Dashboard, GraficosEstadisticas, FiltrosFecha
-- **Consultas**: Agregaciones por fecha, comedor y tipo de ración
-- **Visualización**: Gráficos simples con JavaScript vanilla o Chart.js
+* Interacciones: La lista desplegable debe cargarse dinámicamente con los comedores activos desde ```LocalStorage```.
 
----
+## Módulo: Control de Entregas
+### Historia de Usuario: Registrar entrega de ración
+**Como** responsable de un comedor,
 
-### Historia de Usuario 5: Generar Reportes
-**Como** supervisor municipal
-**Quiero** exportar reportes de entregas y beneficiarios
-**Para** presentar informes a las autoridades municipales
+**Quiero** buscar a un beneficiario por DNI y registrar la entrega de su desayuno o almuerzo con un solo clic,
 
-#### Criterios de Aceptación:
-1. **Dado** que selecciono un período de tiempo
-   **Cuando** genero un reporte de entregas
-   **Entonces** el sistema crea un archivo Excel con todos los registros del período
+**Para** agilizar el proceso de atención y evitar largas colas.
 
-2. **Dado** que filtro por comedor específico
-   **Cuando** exporto el reporte
-   **Entonces** el archivo contiene solo los datos del comedor seleccionado
+### Criterios de Aceptación:
+1. **Dado** que he buscado un DNI válido,
 
-3. **Dado** que genero un reporte de beneficiarios
-   **Cuando** descargo el archivo
-   **Entonces** incluye información personal, comedor asignado y estadísticas de asistencia
+    **Cuando** hago clic en el botón "Registrar Desayuno",
 
-#### Notas Técnicas:
-- **Componentes**: GeneradorReportes, ExportadorExcel, FiltrosAvanzados
-- **Librerías**: SheetJS para exportación a Excel
-- **Formatos**: Excel (.xlsx), PDF (opcional)
+    **Entonces** el estado del desayuno cambia a "Entregado" y el botón se deshabilita.
 
----
+2. **Dado** que un beneficiario ya ha recibido su almuerzo hoy,
 
-### Historia de Usuario 6: Gestionar Usuarios del Sistema
-**Como** administrador general
-**Quiero** crear y administrar cuentas de usuario con diferentes roles
-**Para** controlar el acceso al sistema según las responsabilidades de cada persona
+    **Cuando** busco su DNI,
 
-#### Criterios de Aceptación:
-1. **Dado** que creo un nuevo usuario
-   **Cuando** asigno un rol (Administrador, Supervisor, Responsable)
-   **Entonces** el usuario accede solo a las funcionalidades correspondientes a su rol
+    **Entonces** el botón "Registrar Almuerzo" debe aparecer deshabilitado desde el inicio.
 
-2. **Dado** que un usuario olvida su contraseña
-   **Cuando** solicita restablecerla
-   **Entonces** el sistema permite cambiar la contraseña con validación de identidad
+### Notas Técnicas:
+* Componentes: Campo de búsqueda, panel de información de beneficiario, botones de acción, tabla de historial.
 
-3. **Dado** que reviso la actividad de usuarios
-   **Cuando** accedo al log de acciones
-   **Entonces** veo quién realizó cada operación y cuándo
+* Modelo de Datos (entrega): ```{ id: string, dni: string, beneficiarioNombre: string, comedor: {id: number, nombre: string}, tipo: 'desayuno' | 'almuerzo', fechaISO: string }```
 
-#### Notas Técnicas:
-- **Componentes**: GestionUsuarios, SistemaRoles, LogActividades
-- **Modelos**: Usuario {id, username, email, password_hash, rol, activo, ultimo_acceso}
-- **Seguridad**: Hash de contraseñas, sesiones, validación de permisos
+* Interacciones: La búsqueda se activa al presionar "Enter" o hacer clic en "Buscar". El historial se actualiza en tiempo real.
 
----
+## Módulo: Dashboard
+### Historia de Usuario: Visualizar resumen diario
+**Como** supervisor zonal,
 
-### Historia de Usuario 7: Buscar y Actualizar Beneficiarios
-**Como** responsable del comedor
-**Quiero** buscar beneficiarios por DNI o nombre y actualizar su información
-**Para** mantener los datos actualizados y resolver consultas rápidamente
+**Quiero** ver en un dashboard principal las estadísticas totales de raciones entregadas en el día,
 
-#### Criterios de Aceptación:
-1. **Dado** que ingreso un DNI o nombre en el buscador
-   **Cuando** ejecuto la búsqueda
-   **Entonces** el sistema muestra todos los beneficiarios que coinciden con el criterio
+**Para** tener una visión rápida del rendimiento del programa sin necesidad de revisar reportes detallados.
 
-2. **Dado** que selecciono un beneficiario de los resultados
-   **Cuando** accedo a su perfil
-   **Entonces** puedo ver su historial de entregas y modificar sus datos personales
+### Criterios de Aceptación:
+1. **Dado** que cargo la página del Dashboard,
 
-3. **Dado** que actualizo información de un beneficiario
-   **Cuando** guardo los cambios
-   **Entonces** el sistema registra la modificación con fecha y usuario que la realizó
+    **Cuando** la página se muestra,
+    
+    **Entonces** debo ver tres tarjetas con los totales de "Desayunos Entregados", "Almuerzos Entregados" y "Total Raciones" del día actual.
 
-#### Notas Técnicas:
-- **Componentes**: BuscadorBeneficiarios, PerfilBeneficiario, EditorDatos
-- **Funcionalidades**: Búsqueda por texto, autocompletado, historial de cambios
-- **Validaciones**: Campos obligatorios, formato de datos, permisos de edición
+2. **Dado** que se registra una nueva entrega en la vista de "Control de Entregas",
 
----
+    **Cuando** regreso al Dashboard y recargo la página,
 
-### Historia de Usuario 8: Validar Beneficiarios por Foto
-**Como** responsable del comedor
-**Quiero** ver la foto del beneficiario al registrar una entrega
-**Para** verificar la identidad de la persona y evitar suplantaciones
+    **Entonces** las estadísticas deben estar actualizadas para reflejar esa nueva entrega.
 
-#### Criterios de Aceptación:
-1. **Dado** que ingreso el DNI de un beneficiario
-   **Cuando** el sistema lo encuentra
-   **Entonces** muestra la foto registrada junto con los datos personales
+### Notas Técnicas:
+* Componentes: Tarjetas de estadísticas.
 
-2. **Dado** que la foto no coincide con la persona presente
-   **Cuando** verifico la identidad
-   **Entonces** puedo cancelar la entrega y reportar la incidencia
+* Modelo de Datos: Lectura agregada del array de ```entregas``` en ```LocalStorage```, filtrando por la fecha actual.
 
-3. **Dado** que un beneficiario no tiene foto registrada
-   **Cuando** realizo la entrega
-   **Entonces** el sistema muestra una alerta indicando que falta la foto
-
-#### Notas Técnicas:
-- **Componentes**: VisualizadorFoto, ValidadorIdentidad, ReportIncidencias
-- **Almacenamiento**: Imágenes optimizadas, carga rápida
-- **Fallback**: Placeholder cuando no hay foto disponible
+* Interacciones: Los datos se calculan al cargar la página.
