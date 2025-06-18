@@ -1,205 +1,90 @@
-# Documento de Requerimientos
-## Sistema de Gestión de Comedores Populares - Municipalidad del Callao
+# Requerimientos del Proyecto: ComedorDigital
 
-### 1. Análisis del Problema
+## 1. Análisis del Problema
 
-#### 1.1 Descripción del Negocio
-La Municipalidad Provincial del Callao, a través de su Gerencia de Programas Sociales, gestiona comedores populares que brindan desayunos y almuerzos gratuitos a beneficiarios empadronados. El programa opera en:
-- **Comedor Teresa Izquierdo**: 600 raciones diarias
-- **Comedor Casa del Adulto Mayor (Bocanegra)**: 200 raciones diarias
-- **Total de empadronados**: 1,500 beneficiarios
+### a) Descripción del Negocio
+La Gerencia de Programas Sociales de la Municipalidad Provincial del Callao gestiona comedores populares para asistir a vecinos vulnerables. El objetivo es proveer desayunos y almuerzos gratuitos de forma ordenada y eficiente a cientos de beneficiarios empadronados.
 
-#### 1.2 Dolor Actual (Pain Points)
-- **Gestión manual ineficiente**: Documentos físicos en estanterías ocupan espacio considerable
-- **Búsqueda lenta**: Localizar información específica consume tiempo excesivo
-- **Control precario**: Registros en Excel sin integración ni trazabilidad confiable
-- **Riesgo de duplicados**: Sin validación automática de beneficiarios
-- **Falta de estadísticas**: No hay reportes automatizados para toma de decisiones
-- **Control de entregas deficiente**: No hay validación de "una ración por persona por día"
+### b) Dolor Actual (Pain Point)
+La gestión actual es 100% manual, basada en papel y archivos físicos. Esto genera:
+-   **Ineficiencia:** Búsqueda lenta de información y registros manuales propensos a errores.
+-   **Falta de Trazabilidad:** Imposibilidad de saber en tiempo real cuántas raciones se han entregado o quién las recibió.
+-   **Ocupación de Espacio Físico:** Almacenamiento costoso y desorganizado.
+-   **Sin Datos para Decisiones:** No existen estadísticas consolidadas para la supervisión y mejora del programa.
 
-#### 1.3 Beneficios Esperados
-- **Eficiencia operativa**: Reducción de tiempo en búsquedas y registros
-- **Control automatizado**: Validación automática de entregas y duplicados
-- **Trazabilidad completa**: Auditoría de todas las operaciones
-- **Reportes en tiempo real**: Estadísticas para mejor gestión de recursos
-- **Reducción de errores**: Eliminación de procesos manuales propensos a errores
-- **Optimización de espacio**: Digitalización de archivos físicos
+### c) Beneficios Esperados con "ComedorDigital"
+-   **Agilidad:** Digitalizar el registro de entregas, reduciendo tiempos de espera.
+-   **Control:** Tener un padrón único de beneficiarios y comedores, evitando duplicados y fraudes.
+-   **Trazabilidad:** Generar un historial de cada ración entregada (quién, qué, cuándo y dónde).
+-   **Inteligencia de Negocio:** Visualizar estadísticas en tiempo real para optimizar recursos y tomar decisiones informadas.
 
-### 2. Definición del Alcance
+## 2. Alcance del Proyecto (MVP)
 
-#### 2.1 Funcionalidades Core (MVP)
+### a) Funcionalidades Core
+1.  **Gestión de Comedores:**
+    -   Registrar, ver, actualizar y eliminar (CRUD) la información de cada comedor (nombre, dirección, capacidad, responsable, estado).
+2.  **Gestión de Beneficiarios:**
+    -   Registrar, ver, actualizar y eliminar (CRUD) los datos de los beneficiarios (DNI, nombre, comedor asignado).
+3.  **Control de Entregas de Raciones:**
+    -   Buscar un beneficiario por DNI.
+    -   Registrar la entrega de desayuno y/o almuerzo, validando que solo se entregue una ración de cada tipo por día y por persona.
+    -   Ver el historial de entregas del día en tiempo real.
+4.  **Dashboard de Supervisión:**
+    -   Mostrar estadísticas clave del día: total de desayunos, total de almuerzos y total de raciones.
+    -   Proveer un acceso rápido para el registro de entregas.
 
-##### A. Gestión de Beneficiarios
-- Registro con DNI y foto
-- Consulta y actualización de datos
-- Verificación de duplicados
-- Asignación a comedores
+### b) Restricciones Técnicas
+-   **Frontend:** HTML5, CSS3, TailwindCSS.
+-   **Lógica:** JavaScript (ES6+).
+-   **Base de Datos (Simulada):** `LocalStorage` del navegador. La aplicación debe funcionar sin un backend de servidor.
+-   **Entorno:** Aplicación web accesible desde cualquier navegador moderno.
 
-##### B. Control de Entrega de Raciones
-- Registro diario de asistencia
-- Validación: una ración por tipo por día
-- Alertas de beneficiarios ya atendidos
+### c) Entregables Mínimos
+-   Una aplicación web funcional con las 4 funcionalidades core implementadas.
+-   Código fuente completo y comentado.
+-   Documentación del proyecto (`README.md`, `team.md`, `requirements.md`, `user-stories.md`).
 
-##### C. Gestión de Comedores
-- Registro de comedores y ubicaciones
-- Asignación de responsables
-- Control de capacidad
+## 3. Wireframes y Bocetos
 
-##### D. Panel de Administración
-- Dashboard con estadísticas básicas
-- Reportes por fecha y comedor
-- Exportación a Excel/PDF
-
-##### E. Gestión de Usuarios
-- Roles: Administrador, Supervisor, Responsable
-- Control de accesos básico
-
-#### 2.2 Restricciones Técnicas
-- **Frontend**: HTML, CSS, JavaScript básico
-- **Tiempo de desarrollo**: Limitado por cronograma académico
-- **Equipo**: 3 desarrolladores principiantes
-- **Recursos**: Sin presupuesto para servicios externos premium
-- **Hosting**: Gratuito o de bajo costo
-
-#### 2.3 Entregables Mínimos
-1. **Aplicación web funcional** con las 5 funcionalidades core
-2. **Base de datos** con estructura definida
-3. **Documentación técnica** básica
-4. **Manual de usuario** simple
-5. **Código fuente** documentado y versionado
-
-### 3. Wireframes y Bocetos
-
-#### 3.1 Mapa del Sitio
+### a) Mapa del Sitio
 ```
-Sistema de Comedores Populares
-├── Login/Autenticación
-├── Dashboard Principal
-│   ├── Estadísticas generales
-│   └── Accesos rápidos
-├── Gestión de Beneficiarios
-│   ├── Listar beneficiarios
-│   ├── Registrar nuevo
-│   ├── Editar/Ver detalle
-│   └── Buscar por DNI
-├── Control de Entregas
-│   ├── Registrar entrega
-│   ├── Consultar entregas del día
-│   └── Historial por beneficiario
-├── Gestión de Comedores
-│   ├── Listar comedores
-│   ├── Registrar comedor
-│   └── Asignar responsables
-├── Reportes
-│   ├── Entregas por fecha
-│   ├── Estadísticas por comedor
-│   └── Exportar datos
-└── Administración
-    ├── Gestión de usuarios
-    └── Configuración general
+ComedorDigital
+|
+|-- 🏠 Dashboard (index.html)
+|   |-- Resumen de estadísticas diarias
+|   |-- Acceso rápido a registro de entrega 
+| 
+|-- 🏢 Gestión de Comedores (comedor/comedor.html) 
+|   |-- Formulario para agregar/editar comedores 
+|   |-- Tabla/Lista de comedores existentes
+|
+|-- 👥 Gestión de Beneficiarios (beneficiario/beneficiario.html)
+|   |-- Formulario para agregar/editar beneficiarios
+|   |-- Tabla/Lista de beneficiarios existentes 
+| 
+|-- 🍽️ Control de Entregas (entregas/entregas.html) 
+|   |-- Buscador de beneficiarios por DNI 
+|   |-- Panel de información del beneficiario 
+|   |-- Botones para registrar desayuno/almuerzo 
+|   |-- Historial de entregas del día
 ```
 
-#### 3.2 Interfaces de Baja Fidelidad
+### b) Interfaces de Baja Fidelidad y Flujos
 
-##### Dashboard Principal
-```
-+----------------------------------+
-|  [Logo] Sistema Comedores   [Usuario] |
-+----------------------------------+
-| Resumen del día:                 |
-| □ Raciones entregadas: 450/800   |
-| □ Beneficiarios atendidos: 420   |
-| □ Comedores activos: 2/2         |
-+----------------------------------+
-| Acciones rápidas:                |
-| [Registrar Entrega] [Ver Reportes]|
-+----------------------------------+
-```
+- **Flujo 1: Registrar una nueva entrega (Rol: Responsable de Comedor)**
+    1.  El usuario ingresa a la vista "Control de Entregas".
+    2.  Introduce el DNI del beneficiario en el campo de búsqueda.
+    3.  El sistema muestra los datos del beneficiario y el estado de sus raciones del día (pendiente/entregado).
+    4.  El usuario hace clic en "Registrar Desayuno" o "Registrar Almuerzo".
+    5.  El sistema guarda la entrega, actualiza el estado a "Entregado" y añade el registro al historial del día.
 
-##### Registro de Beneficiario
-```
-+----------------------------------+
-| Registrar Nuevo Beneficiario     |
-+----------------------------------+
-| DNI: [________] [Validar]        |
-| Nombres: [________________]      |
-| Apellidos: [______________]      |
-| Teléfono: [___________]          |
-| Dirección: [______________]      |
-| Comedor asignado: [▼Seleccionar] |
-| Foto: [Subir archivo]            |
-| [Guardar] [Cancelar]             |
-+----------------------------------+
-```
+- **Flujo 2: Registrar un nuevo beneficiario (Rol: Administrador)**
+    1. El usuario va a la vista "Gestión de Beneficiarios".
+    2. Rellena el formulario con DNI, nombre y selecciona un comedor de una lista desplegable.
+    3. Hace clic en "Guardar".
+    4. El sistema valida los datos y añade el nuevo beneficiario a la lista y al `LocalStorage`.
 
-##### Control de Entregas
-```
-+----------------------------------+
-| Registrar Entrega de Ración      |
-+----------------------------------+
-| DNI Beneficiario: [______] [🔍]  |
-| Nombre: Juan Pérez López         |
-| Comedor: Teresa Izquierdo        |
-| Tipo de ración:                  |
-| ○ Desayuno ○ Almuerzo           |
-| Estado: ✅ Disponible            |
-| [Confirmar Entrega]              |
-+----------------------------------+
-```
-
-#### 3.3 Flujos de Usuario
-
-##### Flujo: Entrega de Ración
-1. Usuario ingresa DNI del beneficiario
-2. Sistema valida existencia en padrón
-3. Sistema verifica si ya recibió ración del tipo solicitado
-4. Si está disponible: confirma entrega
-5. Sistema registra entrega con timestamp
-6. Muestra confirmación al usuario
-
-##### Flujo: Registro de Beneficiario
-1. Usuario ingresa DNI
-2. Sistema verifica que no existe duplicado
-3. Usuario completa formulario
-4. Sistema valida datos obligatorios
-5. Usuario sube foto (opcional)
-6. Sistema guarda registro
-7. Asigna automáticamente a comedor según jurisdicción
-
-### 4. Estructura del Documento
-
-#### 4.1 Priorización de Funcionalidades
-**Prioridad Alta (Sprint 1)**:
-- Gestión básica de beneficiarios
-- Control simple de entregas
-- Dashboard básico
-
-**Prioridad Media (Sprint 2)**:
-- Gestión de comedores
-- Reportes básicos
-- Validaciones avanzadas
-
-**Prioridad Baja (Sprint 3)**:
-- Exportación de datos
-- Gestión avanzada de usuarios
-- Auditoría completa
-
-#### 4.2 Consideraciones Técnicas
-- **Base de datos**: SQLite para simplicidad inicial
-- **Autenticación**: Sistema básico con sesiones
-- **Responsive**: Mobile-first approach
-- **Validaciones**: Frontend y backend
-- **Backup**: Sistema básico de respaldo
-
-#### 4.3 Cronograma Sugerido
-- **Semana 1-2**: Diseño de BD y estructura del proyecto
-- **Semana 3-4**: Desarrollo de funcionalidades core
-- **Semana 5**: Integración y testing
-- **Semana 6**: Documentación y entrega
-
-### 5. Criterios de Éxito
-- Sistema funcional con las 5 funcionalidades core
-- Capacidad de gestionar 1,500 beneficiarios
-- Tiempo de respuesta menor a 3 segundos
-- Interfaz intuitiva para usuarios no técnicos
-- Documentación completa para mantenimiento futuro
+- **Flujo 3: Supervisar la jornada (Rol: Supervisor Zonal)**
+    1. El usuario ingresa al "Dashboard".
+    2. Observa las tarjetas de estadísticas para ver en tiempo real cuántos desayunos y almuerzos se han servido.
+    3. Puede navegar a las otras vistas para ver detalles específicos.
