@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ComedorDigital - Dashboard Principal</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -260,15 +260,16 @@
 
                     <!-- Botones de Registro -->
                     <div class="flex flex-col sm:flex-row gap-4 justify-center" id="botonesRegistro" style="display: none;">
-                        <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
-                            <span>🌅</span>
-                            <span>Registrar Desayuno</span>
-                        </button>
-                        <button class="bg-primary hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
-                            <span>🍽️</span>
-                            <span>Registrar Almuerzo</span>
-                        </button>
-                    </div>
+  <button id="registrarDesayuno" class="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+    <span>🌅</span>
+    <span>Registrar Desayuno</span>
+  </button>
+  <button id="registrarAlmuerzo" class="bg-primary hover:bg-blue-700 text-white px-6 md:px-8 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2 justify-center text-sm md:text-base">
+    <span>🍽️</span>
+    <span>Registrar Almuerzo</span>
+  </button>
+</div>
+
                 </div>
             </div>
         </section>
@@ -350,7 +351,7 @@
                     <span class="text-xl md:text-2xl mr-3">📋</span>
                     <h3 class="text-lg md:text-xl font-bold text-gray-800">Actividad Reciente</h3>
                 </div>
-                <div class="space-y-3">
+                <div class="space-y-3" id="actividad-reciente">
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center space-x-3">
                             <span class="text-xl md:text-2xl">🍽️</span>
