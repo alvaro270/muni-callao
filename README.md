@@ -14,6 +14,6 @@ Este proyecto fue construido utilizando tecnologías web fundamentales, enfocán
 
 ## 3. Documentación del Proyecto
 La planificación y estructura del proyecto están detalladas en los siguientes documentos:
-* 📄 Roles del Equipo (team.md): Define quiénes somos y cuáles son nuestras responsabilidades.
-* 🎯 Requerimientos del Proyecto (requirements.md): Describe el qué y el porqué de nuestro proyecto, detallando el alcance y las funcionalidades.
-* 🧑‍💻 Historias de Usuario (user-stories.md): Desglosa cada funcionalidad en tareas concretas desde la perspectiva del usuario.
+* 📄 Roles del Equipo ([team.md](https://alvaro270.github.io/muni-callao/docs/team)): Define quiénes somos y cuáles son nuestras responsabilidades.
+* 🎯 Requerimientos del Proyecto ([requirements.md](https://alvaro270.github.io/muni-callao/docs/requirements)): Describe el qué y el porqué de nuestro proyecto, detallando el alcance y las funcionalidades.
+* 🧑‍💻 Historias de Usuario ([user-stories.md](https://alvaro270.github.io/muni-callao/docs/user-stories)): Desglosa cada funcionalidad en tareas concretas desde la perspectiva del usuario.
