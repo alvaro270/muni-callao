@@ -121,13 +121,37 @@ function mostrarEstadisticasGenerales(entregas) {
   const almuerzos = entregas.filter((e) => e.tipo === "almuerzo").length;
   const total = desayunos + almuerzos;
 
+  // Capacidad total estimada (suma de capacidades de todos los comedores)
+  const capacidadDesayunos = 600 + 200;
+  const capacidadAlmuerzos = 600 + 200;
+  const capacidadTotal = capacidadDesayunos + capacidadAlmuerzos;
+
   document.getElementById("desayunos").textContent = desayunos;
   document.getElementById("almuerzos").textContent = almuerzos;
   document.getElementById("total").textContent = total;
+
+  // Actualizar barras
+  const desayunoPorcentaje = (desayunos / capacidadDesayunos) * 100;
+  const almuerzoPorcentaje = (almuerzos / capacidadAlmuerzos) * 100;
+  const totalPorcentaje = (total / capacidadTotal) * 100;
+
+  document.querySelector("#desayunos").closest(".card-hover").querySelector(".bg-orange-400").style.width = `${desayunoPorcentaje}%`;
+  document.querySelector("#almuerzos").closest(".card-hover").querySelector(".bg-secondary").style.width = `${almuerzoPorcentaje}%`;
+  document.querySelector("#total").closest(".card-hover").querySelector(".bg-primary").style.width = `${totalPorcentaje}%`;
+
+  // Actualizar textos de capacidad
+  document.querySelector("#desayunos").closest(".card-hover").querySelector(".text-gray-500").textContent = `${desayunoPorcentaje.toFixed(0)}% de capacidad`;
+  document.querySelector("#almuerzos").closest(".card-hover").querySelector(".text-gray-500").textContent = `${almuerzoPorcentaje.toFixed(0)}% de capacidad`;
+  document.querySelector("#total").closest(".card-hover").querySelector(".text-gray-500").textContent = `${totalPorcentaje.toFixed(0)}% de capacidad total`;
 }
 
-// Mostrar resumen por comedores
+
 function mostrarResumenPorComedores(entregas) {
+  const capacidades = {
+    "Teresa Izquierdo": 600,
+    "Casa Adulto Mayor - Bocanegra": 200
+  };
+
   const resumen = {};
 
   entregas.forEach((e) => {
@@ -137,52 +161,30 @@ function mostrarResumenPorComedores(entregas) {
     if (e.tipo === "almuerzo") resumen[nombre].almuerzos++;
   });
 
-  // Teresa Izquierdo
-  const dTeresa = resumen["Teresa Izquierdo"]?.desayunos || 0;
-  const aTeresa = resumen["Teresa Izquierdo"]?.almuerzos || 0;
-  const tTeresa = dTeresa + aTeresa;
+  document.querySelectorAll(".card-hover[data-comedor]").forEach((card) => {
+    const comedor = card.getAttribute("data-comedor");
+    const cap = capacidades[comedor] || 100;
 
-  document.querySelector(
-    ".card-hover:nth-child(1) .font-semibold"
-  ).textContent = `${dTeresa} de 600`;
-  document.querySelector(
-    ".card-hover:nth-child(1) .bg-orange-400"
-  ).style.width = `${(dTeresa / 600) * 100}%`;
+    const desayunos = resumen[comedor]?.desayunos || 0;
+    const almuerzos = resumen[comedor]?.almuerzos || 0;
+    const total = desayunos + almuerzos;
 
-  document.querySelector(
-    ".card-hover:nth-child(1) .text-gray-600 + .font-semibold"
-  ).textContent = `${aTeresa} de 600`;
-  document.querySelector(
-    ".card-hover:nth-child(1) .bg-secondary"
-  ).style.width = `${(aTeresa / 600) * 100}%`;
+    const desayunoText = card.querySelector(".desayuno-text");
+    const desayunoBar = card.querySelector(".desayuno-bar");
+    const almuerzoText = card.querySelector(".almuerzo-text");
+    const almuerzoBar = card.querySelector(".almuerzo-bar");
+    const totalText = card.querySelector(".total-text");
 
-  document.querySelector(
-    ".card-hover:nth-child(1) .text-primary.font-bold"
-  ).textContent = tTeresa;
+    if (desayunoText) desayunoText.textContent = `${desayunos} de ${cap}`;
+    if (desayunoBar) desayunoBar.style.width = `${(desayunos / cap) * 100}%`;
 
-  // Casa Adulto Mayor - Bocanegra
-  const dBoca = resumen["Casa Adulto Mayor - Bocanegra"]?.desayunos || 0;
-  const aBoca = resumen["Casa Adulto Mayor - Bocanegra"]?.almuerzos || 0;
-  const tBoca = dBoca + aBoca;
+    if (almuerzoText) almuerzoText.textContent = `${almuerzos} de ${cap}`;
+    if (almuerzoBar) almuerzoBar.style.width = `${(almuerzos / cap) * 100}%`;
 
-  document.querySelector(
-    ".card-hover:nth-child(2) .font-semibold"
-  ).textContent = `${dBoca} de 200`;
-  document.querySelector(
-    ".card-hover:nth-child(2) .bg-orange-400"
-  ).style.width = `${(dBoca / 200) * 100}%`;
-
-  document.querySelector(
-    ".card-hover:nth-child(2) .text-gray-600 + .font-semibold"
-  ).textContent = `${aBoca} de 200`;
-  document.querySelector(
-    ".card-hover:nth-child(2) .bg-secondary"
-  ).style.width = `${(aBoca / 200) * 100}%`;
-
-  document.querySelector(
-    ".card-hover:nth-child(2) .text-primary.font-bold"
-  ).textContent = tBoca;
+    if (totalText) totalText.textContent = total;
+  });
 }
+
 
 // Mostrar actividad reciente
 function mostrarActividadReciente(entregas) {
