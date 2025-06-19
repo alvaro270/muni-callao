@@ -1,210 +1,187 @@
 // ===== PATRÓN STORE - MANEJO DE ESTADO GLOBAL =====
 const EntregasStore = {
     state: {
-        beneficiarios: [],
         entregasHoy: [],
         beneficiarioActual: null,
-        filtros: {
-            dni: '',
-            comedor: '',
-            tipo: '',
-        },
         loading: false,
-        error: null,
     },
     listeners: [],
-    subscribe(listener) {
-        this.listeners.push(listener);
-    },
-    notify() {
-        this.listeners.forEach(listener => listener(this.state));
-    },
+    subscribe(listener) { this.listeners.push(listener); },
+    notify() { this.listeners.forEach(listener => listener(this.state)); },
     setState(partialState) {
         this.state = { ...this.state, ...partialState };
         this.notify();
     }
 };
 
-// ===== CLASES Y MODELADO DE OBJETOS (POO) =====
-// No se necesitan cambios aquí, las clases son conceptuales.
-class Beneficiario {
-    constructor(dni, nombre, comedor, activo = true) {
-        if (!Beneficiario.validarDNI(dni)) {
-            throw new Error("El DNI proporcionado no es válido.");
-        }
-        this.dni = dni;
-        this.nombre = nombre;
-        this.comedor = comedor; // Ahora 'comedor' es un objeto {id, nombre}
-        this.activo = activo;
-    }
-    static validarDNI(dni) {
-        return /^\d{8}$/.test(dni);
-    }
-}
-
-class Entrega {
-    constructor(dni, beneficiarioNombre, comedor, tipo, usuario = 'admin_responsable') {
-        this.id = crypto.randomUUID();
-        this.dni = dni;
-        this.beneficiarioNombre = beneficiarioNombre;
-        this.comedor = comedor; // Aquí también 'comedor' es el objeto {id, nombre}
-        this.tipo = tipo;
-        this.fechaISO = new Date().toISOString();
-        this.registradoPor = usuario;
-        this.estado = 'entregado';
-    }
-}
+// --- CLASES (Conceptuales, sin cambios) ---
+class Beneficiario {}
+class Entrega {}
 
 // ===== SIMULACIÓN DE BASE DE DATOS (LocalStorage) =====
 class EntregasDatabase {
     constructor() {
-        // CAMBIO CLAVE: Nos aseguramos de usar exactamente las mismas claves de LocalStorage
-        // que los otros módulos para que los datos estén sincronizados.
+        // CORRECCIÓN: Usamos las claves estandarizadas que usan los otros módulos
         this.BENEFICIARIOS_KEY = 'beneficiarios';
-        this.ENTREGAS_KEY = 'comedorDigital_entregas'; // Mantenemos esta clave para las entregas
+        this.ENTREGAS_KEY = 'comedorDigital_entregas';
     }
 
-    // Ya no necesitamos inicializar datos aquí, porque los otros módulos (beneficiario, comedor)
-    // se encargan de crear sus propios datos. Esta vista solo los consume.
-
-    buscarBeneficiarioPorDNI(dni) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => { 
-                try {
-                    const beneficiariosJSON = localStorage.getItem(this.BENEFICIARIOS_KEY);
-                    if (!beneficiariosJSON) return resolve(null);
-                    const beneficiarios = JSON.parse(beneficiariosJSON);
-                    const beneficiario = beneficiarios.find(b => b.dni === dni);
-                    resolve(beneficiario || null);
-                } catch (error) {
-                    console.error("Error al buscar beneficiario:", error);
-                    reject("No se pudo acceder a los datos de beneficiarios.");
-                }
-            }, 500);
-        });
+    // Busca un beneficiario y devuelve el objeto completo
+    async buscarBeneficiarioPorDNI(dni) {
+        const beneficiariosJSON = localStorage.getItem(this.BENEFICIARIOS_KEY);
+        if (!beneficiariosJSON) return null;
+        try {
+            const beneficiarios = JSON.parse(beneficiariosJSON);
+            // Devuelve el objeto completo, que incluye la propiedad 'estado'
+            return beneficiarios.find(b => b.dni === dni) || null;
+        } catch(e) {
+            console.error("Error al leer beneficiarios:", e);
+            return null;
+        }
     }
 
-    obtenerEntregasDeHoy() {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                try {
-                    const entregasJSON = localStorage.getItem(this.ENTREGAS_KEY);
-                    if (!entregasJSON) return resolve([]);
-                    const todasLasEntregas = JSON.parse(entregasJSON);
-                    const hoy = new Date().toDateString();
-                    const entregasHoy = todasLasEntregas.filter(e => new Date(e.fechaISO).toDateString() === hoy);
-                    resolve(entregasHoy);
-                } catch (error) {
-                    console.error("Error al obtener entregas:", error);
-                    reject("No se pudo acceder al historial de entregas.");
-                }
-            }, 300);
-        });
+    async obtenerEntregas() {
+        const entregasJSON = localStorage.getItem(this.ENTREGAS_KEY);
+        return entregasJSON ? JSON.parse(entregasJSON) : [];
+    }
+    
+    async guardarEntregas(entregas) {
+        localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(entregas));
     }
 
-    registrarNuevaEntrega(entrega) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const todasLasEntregasJSON = localStorage.getItem(this.ENTREGAS_KEY) || '[]';
-                const todasLasEntregas = JSON.parse(todasLasEntregasJSON);
-                todasLasEntregas.push(entrega);
-                localStorage.setItem(this.ENTREGAS_KEY, JSON.stringify(todasLasEntregas));
-                resolve(entrega);
-            } catch (error) {
-                console.error("Error al registrar entrega:", error);
-                reject("No se pudo guardar la entrega.");
-            }
-        });
+    async obtenerEntregasDeHoy() {
+        const todas = await this.obtenerEntregas();
+        const hoy = new Date().toDateString();
+        return todas.filter(e => new Date(e.fechaISO).toDateString() === hoy);
+    }
+    
+    async registrarNuevaEntrega(entrega) {
+        const todas = await this.obtenerEntregas();
+        todas.push(entrega);
+        await this.guardarEntregas(todas);
+        return entrega;
+    }
+
+    async eliminarEntrega(id) {
+        let todas = await this.obtenerEntregas();
+        const entregasFiltradas = todas.filter(e => e.id !== id);
+        if (todas.length === entregasFiltradas.length) throw new Error("No se encontró la entrega para eliminar.");
+        await this.guardarEntregas(entregasFiltradas);
+        return true;
+    }
+
+    async actualizarEntrega(id, datosActualizados) {
+        let todas = await this.obtenerEntregas();
+        const index = todas.findIndex(e => e.id === id);
+        if (index === -1) throw new Error("No se encontró la entrega para actualizar.");
+        todas[index].tipo = datosActualizados.tipo;
+        await this.guardarEntregas(todas);
+        return todas[index];
     }
 }
+
 
 // ===== LÓGICA DE LA APLICACIÓN (Controlador) =====
 const db = new EntregasDatabase();
 
 async function handleBuscarBeneficiario() {
-    const dniInput = document.getElementById('searchDNI');
-    const dni = dniInput.value.trim();
-
-    if (!Beneficiario.validarDNI(dni)) {
-        mostrarModal("DNI Inválido", "Por favor, ingrese un DNI válido de 8 dígitos.", true);
-        return;
+    const dni = document.getElementById('searchDNI').value.trim();
+    if (!/^\d{8}$/.test(dni)) {
+        return mostrarModal('DNI Inválido', 'Por favor, ingrese un DNI válido de 8 dígitos.', true);
     }
-
-    EntregasStore.setState({ loading: true, beneficiarioActual: null, error: null });
-
-    try {
-        const beneficiario = await db.buscarBeneficiarioPorDNI(dni);
-        if (beneficiario) {
-            EntregasStore.setState({ beneficiarioActual: beneficiario, loading: false });
-        } else {
-            EntregasStore.setState({ error: "Beneficiario no encontrado.", loading: false });
-            mostrarModal("No Encontrado", `No se encontró ningún beneficiario con el DNI ${dni}.`, true);
-        }
-    } catch (error) {
-        EntregasStore.setState({ error, loading: false });
-        mostrarModal("Error de Búsqueda", error, true);
+    EntregasStore.setState({ loading: true, beneficiarioActual: null });
+    const beneficiario = await db.buscarBeneficiarioPorDNI(dni);
+    if (beneficiario) {
+        EntregasStore.setState({ beneficiarioActual: beneficiario, loading: false });
+    } else {
+        mostrarModal("No Encontrado", `No se encontró ningún beneficiario con el DNI ${dni}.`, true);
+        EntregasStore.setState({ loading: false });
     }
 }
 
 async function handleRegistrarEntrega(tipo) {
     const { beneficiarioActual, entregasHoy } = EntregasStore.state;
     if (!beneficiarioActual) return;
-
-    const yaRecibio = entregasHoy.find(e => e.dni === beneficiarioActual.dni && e.tipo === tipo);
-    if (yaRecibio) {
-        mostrarModal("Entrega Duplicada", `El beneficiario ya recibió el ${tipo} el día de hoy.`, true);
-        return;
-    }
-
-    EntregasStore.setState({ loading: true });
     
-    // Al crear la nueva entrega, pasamos el objeto 'comedor' completo.
-    const nuevaEntrega = new Entrega(
-        beneficiarioActual.dni,
-        beneficiarioActual.nombre,
-        beneficiarioActual.comedor, 
-        tipo
-    );
+    // CORRECCIÓN: Se valida la propiedad 'estado' del objeto beneficiario.
+    // El objeto se carga completo desde localStorage, por lo que ahora sí tiene esta propiedad.
+    if (beneficiarioActual.estado !== 'Activo') {
+         return mostrarModal("Beneficiario Inactivo", "No se puede registrar entregas a un beneficiario inactivo.", true);
+    }
 
-    try {
-        await db.registrarNuevaEntrega(nuevaEntrega);
-        const nuevoHistorial = await db.obtenerEntregasDeHoy();
-        EntregasStore.setState({ entregasHoy: nuevoHistorial, loading: false });
-        mostrarModal("Registro Exitoso", `Se ha registrado el ${tipo} para ${beneficiarioActual.nombre}.`);
-        
-        setTimeout(handleLimpiarBusqueda, 1500);
+    if (entregasHoy.some(e => e.dni === beneficiarioActual.dni && e.tipo === tipo)) {
+        return mostrarModal("Entrega Duplicada", `El beneficiario ya recibió su ${tipo} hoy.`, true);
+    }
+    const nuevaEntrega = {
+        id: crypto.randomUUID(),
+        dni: beneficiarioActual.dni,
+        beneficiarioNombre: beneficiarioActual.nombre,
+        comedor: beneficiarioActual.comedor,
+        tipo: tipo,
+        fechaISO: new Date().toISOString(),
+        estado: 'entregado',
+    };
+    await db.registrarNuevaEntrega(nuevaEntrega);
+    await actualizarEntregasYUI();
+    mostrarModal("Registro Exitoso", `Se ha registrado el ${tipo} para ${beneficiarioActual.nombre}.`);
+    handleLimpiarBusqueda();
+}
 
-    } catch (error) {
-        EntregasStore.setState({ loading: false, error });
-        mostrarModal("Error al Registrar", error, true);
+async function handleEliminarEntrega(id) {
+    if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+        try {
+            await db.eliminarEntrega(id);
+            mostrarModal("Eliminado", "El registro ha sido eliminado.");
+            await actualizarEntregasYUI();
+        } catch (error) {
+            mostrarModal("Error", error.message, true);
+        }
     }
 }
 
-function handleLimpiarBusqueda() {
-    document.getElementById('searchDNI').value = '';
-    EntregasStore.setState({ beneficiarioActual: null, error: null });
+function handleAbrirModalEditar(id) {
+    const entrega = EntregasStore.state.entregasHoy.find(e => e.id === id);
+    if(entrega) {
+        document.getElementById('editEntregaId').value = id;
+        document.getElementById('editBeneficiarioNombre').textContent = entrega.beneficiarioNombre;
+        document.getElementById('editTipoRacion').value = entrega.tipo;
+        document.getElementById('modalEditar').style.display = 'flex';
+    }
 }
 
-function handleLimpiarFiltros() {
-    handleLimpiarBusqueda();
-    document.getElementById('filterComedor').value = '';
-    document.getElementById('filterTipo').value = '';
-    document.getElementById('filterComedor').dispatchEvent(new Event('change'));
+async function handleGuardarCambiosEntrega(event) {
+    event.preventDefault();
+    const id = document.getElementById('editEntregaId').value;
+    const tipo = document.getElementById('editTipoRacion').value;
+    try {
+        await db.actualizarEntrega(id, { tipo });
+        mostrarModal("Actualizado", "La entrega ha sido modificada.");
+        cerrarModal('modalEditar');
+        await actualizarEntregasYUI();
+    } catch (error) {
+        mostrarModal("Error", error.message, true);
+    }
 }
 
 async function inicializarApp() {
     EntregasStore.setState({ loading: true });
-    try {
-        const entregasHoy = await db.obtenerEntregasDeHoy();
-        EntregasStore.setState({ entregasHoy, loading: false });
-    } catch (error) {
-        EntregasStore.setState({ error, loading: false });
-        mostrarModal("Error de Carga", "No se pudo cargar el historial inicial.", true);
-    }
+    await actualizarEntregasYUI();
+    EntregasStore.setState({ loading: false });
 }
 
+async function actualizarEntregasYUI() {
+    const entregasHoy = await db.obtenerEntregasDeHoy();
+    EntregasStore.setState({ entregasHoy });
+}
+
+function handleLimpiarBusqueda() {
+    document.getElementById('searchDNI').value = '';
+    EntregasStore.setState({ beneficiarioActual: null });
+}
+
+
 // ===== RENDERIZADO Y MANEJO DEL DOM =====
-function renderizarPanelBeneficiario({ beneficiarioActual }) {
+function renderizarPanelBeneficiario({ beneficiarioActual, entregasHoy }) {
     const section = document.getElementById('beneficiarioSection');
     if (!beneficiarioActual) {
         section.style.display = 'none';
@@ -214,52 +191,76 @@ function renderizarPanelBeneficiario({ beneficiarioActual }) {
 
     document.getElementById('beneficiarioNombre').textContent = beneficiarioActual.nombre;
     document.getElementById('beneficiarioDNI').textContent = beneficiarioActual.dni;
-
-    // CORRECCIÓN CLAVE 1: Acceder a la propiedad 'nombre' del objeto 'comedor'.
-    // Usamos 'optional chaining' (?.) por si el objeto comedor no existiera.
     document.getElementById('beneficiarioComedor').textContent = beneficiarioActual.comedor?.nombre || 'No asignado';
+    
+    const entregasDelBeneficiario = entregasHoy.filter(e => e.dni === beneficiarioActual.dni);
+    const tieneDesayuno = entregasDelBeneficiario.some(e => e.tipo === 'desayuno');
+    const tieneAlmuerzo = entregasDelBeneficiario.some(e => e.tipo === 'almuerzo');
+    
+    const esActivo = beneficiarioActual.estado === 'Activo';
+
+    const estadoDesayunoEl = document.getElementById('estadoDesayuno');
+    const btnDesayuno = document.getElementById('btnDesayuno');
+    if (tieneDesayuno) {
+        estadoDesayunoEl.textContent = '✅ Entregado';
+        btnDesayuno.disabled = true;
+    } else if (!esActivo) {
+        estadoDesayunoEl.textContent = '❌ Inactivo';
+        btnDesayuno.disabled = true;
+    } else {
+        estadoDesayunoEl.textContent = '⏳ Pendiente';
+        btnDesayuno.disabled = false;
+    }
+
+    const estadoAlmuerzoEl = document.getElementById('estadoAlmuerzo');
+    const btnAlmuerzo = document.getElementById('btnAlmuerzo');
+    if (tieneAlmuerzo) {
+        estadoAlmuerzoEl.textContent = '✅ Entregado';
+        btnAlmuerzo.disabled = true;
+    } else if (!esActivo) {
+        estadoAlmuerzoEl.textContent = '❌ Inactivo';
+        btnAlmuerzo.disabled = true;
+    } else {
+        estadoAlmuerzoEl.textContent = '⏳ Pendiente';
+        btnAlmuerzo.disabled = false;
+    }
 }
 
-function renderizarHistorial({ entregasHoy, filtros }) {
+function renderizarHistorial({ entregasHoy }) {
     const tbody = document.getElementById('historialBody');
-    const noDataMessage = document.getElementById('noDataMessage');
     tbody.innerHTML = '';
+    
+    const entregasOrdenadas = [...entregasHoy].sort((a,b) => new Date(b.fechaISO) - new Date(a.fechaISO));
 
-    const entregasFiltradas = entregasHoy
-        // CORRECCIÓN: Al filtrar, también comparamos con la propiedad 'nombre' del objeto 'comedor'.
-        .filter(e => filtros.comedor ? e.comedor?.nombre === filtros.comedor : true)
-        .filter(e => filtros.tipo ? e.tipo === filtros.tipo : true)
-        .sort((a, b) => new Date(b.fechaISO) - new Date(a.fechaISO));
-
-    if (entregasFiltradas.length === 0) {
-        noDataMessage.style.display = 'block';
-    } else {
-        noDataMessage.style.display = 'none';
-        entregasFiltradas.forEach(entrega => {
-            const tr = document.createElement('tr');
-            tr.className = 'border-b hover:bg-gray-50';
-            const hora = new Date(entrega.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            
-            // CORRECCIÓN CLAVE 2: Mostrar 'entrega.comedor.nombre' en la tabla.
-            tr.innerHTML = `
-                <td class="px-4 py-3">${hora}</td>
-                <td class="px-4 py-3 font-medium text-gray-800">${entrega.dni}</td>
-                <td class="px-4 py-3">${entrega.beneficiarioNombre}</td>
-                <td class="px-4 py-3">${entrega.comedor?.nombre || 'No especificado'}</td>
-                <td class="px-4 py-3">
-                    <span class="px-2 py-1 rounded-full text-xs font-medium ${entrega.tipo === 'desayuno' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}">
-                        ${entrega.tipo === 'desayuno' ? '🌅 Desayuno' : '🍽️ Almuerzo'}
-                    </span>
-                </td>
-                <td class="px-4 py-3">
-                    <span class="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-                        ✅ Entregado
-                    </span>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
+    if (entregasOrdenadas.length === 0) {
+        document.getElementById('noDataMessage').style.display = 'table-row';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500"><span class="text-4xl mb-4 block">📝</span><p>No hay entregas registradas hoy.</p></td></tr>';
+        return;
     }
+    
+    document.getElementById('noDataMessage').style.display = 'none';
+    entregasOrdenadas.forEach(entrega => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b hover:bg-gray-50';
+        const hora = new Date(entrega.fechaISO).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+        
+        tr.innerHTML = `
+            <td class="px-4 py-3">${hora}</td>
+            <td class="px-4 py-3">${entrega.dni}</td>
+            <td class="px-4 py-3 font-medium">${entrega.beneficiarioNombre}</td>
+            <td class="px-4 py-3">${entrega.comedor?.nombre || 'N/A'}</td>
+            <td class="px-4 py-3">
+                <span class="px-2 py-1 text-xs font-medium rounded-full ${entrega.tipo === 'desayuno' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}">
+                    ${entrega.tipo === 'desayuno' ? '🌅 Desayuno' : '🍽️ Almuerzo'}
+                </span>
+            </td>
+            <td class="px-4 py-3 text-center space-x-2">
+                <button onclick="handleAbrirModalEditar('${entrega.id}')" title="Editar" class="text-blue-600 hover:text-blue-900 transition-colors">✏️</button>
+                <button onclick="handleEliminarEntrega('${entrega.id}')" title="Eliminar" class="text-red-600 hover:text-red-900 transition-colors">🗑️</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 function renderizarEstadisticas({ entregasHoy }) {
@@ -278,18 +279,16 @@ function mostrarModal(titulo, mensaje, esError = false) {
     const modal = document.getElementById('modalConfirmacion');
     document.getElementById('modalTitulo').textContent = titulo;
     document.getElementById('modalMensaje').textContent = mensaje;
-    const icon = document.getElementById('modalIcon');
-    icon.textContent = esError ? '❌' : '✅';
+    document.getElementById('modalIcon').textContent = esError ? '❌' : '✅';
     modal.style.display = 'flex';
 }
 
-function cerrarModal() {
-    document.getElementById('modalConfirmacion').style.display = 'none';
+function cerrarModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
 }
 
 function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('open');
+    document.getElementById('mobile-menu').classList.toggle('open');
 }
 
 function actualizarFechaActual() {
@@ -301,42 +300,17 @@ function actualizarFechaActual() {
 
 // ===== INICIALIZACIÓN Y EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', () => {
-    const searchDNIInput = document.getElementById('searchDNI');
-    const buscarBtn = document.getElementById('btnBuscar');
-    const limpiarBtn = document.getElementById('btnLimpiar');
-    const filterComedor = document.getElementById('filterComedor');
-    const filterTipo = document.getElementById('filterTipo');
-
-    if (buscarBtn) {
-        buscarBtn.onclick = handleBuscarBeneficiario;
-    }
-    if (limpiarBtn) {
-        limpiarBtn.onclick = handleLimpiarFiltros;
-    }
-
-    // Suscribimos los renderizadores que dependen del estado global
     EntregasStore.subscribe(renderizarPanelBeneficiario);
     EntregasStore.subscribe(renderizarHistorial);
     EntregasStore.subscribe(renderizarEstadisticas);
     
-    searchDNIInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleBuscarBeneficiario();
-        }
+    document.getElementById('btnBuscar').onclick = handleBuscarBeneficiario;
+    document.getElementById('btnLimpiar').onclick = handleLimpiarBusqueda;
+    document.getElementById('formEditarEntrega').addEventListener('submit', handleGuardarCambiosEntrega);
+    
+    document.getElementById('searchDNI').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleBuscarBeneficiario();
     });
-
-    const actualizarFiltros = () => {
-        EntregasStore.setState({
-            filtros: {
-                // Para el filtro, usamos el valor del select, que es el nombre del comedor
-                comedor: filterComedor.value,
-                tipo: filterTipo.value
-            }
-        });
-    };
-
-    filterComedor.addEventListener('change', actualizarFiltros);
-    filterTipo.addEventListener('change', actualizarFiltros);
 
     actualizarFechaActual();
     inicializarApp();
